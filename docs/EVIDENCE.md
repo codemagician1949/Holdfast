@@ -131,13 +131,13 @@ What earlier runs found:
 
 ### Clean-clone runs (2026-11-06)
 
-- `contract/test.sh` from a fresh clone: **24 tests pass in 1 min 51 s** ([log](../verify/runs/2026-11-06-clean-clone-contract-tests.log)). The first attempt failed the way reviewers saw: near-workspaces could not download and unpack the NEAR sandbox. `test.sh` now fetches the same pinned sandbox binary itself (with retries) and points `NEAR_SANDBOX_BIN_PATH` at it.
+- `contract/test.sh` from a fresh clone: **24 tests pass in 1 min 51 s** (the Deed crate on 2026-11-06; since the blocklist and agent-vault contracts were added the same command runs 36, all passing on 2026-11-07) ([log](../verify/runs/2026-11-06-clean-clone-contract-tests.log)). The first attempt failed the way reviewers saw: near-workspaces could not download and unpack the NEAR sandbox. `test.sh` now fetches the same pinned sandbox binary itself (with retries) and points `NEAR_SANDBOX_BIN_PATH` at it.
 - `verify/rebuild-deed.sh` in GitHub Actions from a fresh checkout: rebuilt hash `4TM4z2E1…` = the code on chain ([log](../verify/runs/2026-11-06-ci-rebuild-deed.log), [run](https://github.com/codemagician1949/Deed/actions/runs/42206333663)). On macOS a fresh-clone rebuild first failed with "Cargo.toml does not exist" (also reported by an outside AI review): cargo-near copies the repo into `$TMPDIR`, which on macOS is `/var/folders/…` and invisible to Docker. `rebuild-deed.sh` now uses a Docker-shared folder for its clone and for cargo-near's copy, and checks Docker can see it before building. Re-run from a fresh clone on macOS (2026-11-07): `PASS`, rebuilt hash `5L5QNCox…` = the code on chain ([log](../verify/runs/2026-11-07-clean-clone-macos-rebuild-deed.log)).
 - `verify/recompute-title.py --compare`: the title page's four headline numbers recomputed from chain data by independent code match the page's own loader; settled jobs and sales match contract state.
 
 ## Testing strategy
 
-Contract and sale: three layers, each closer to reality (the runtime adds a fourth, [runtime/test](../runtime/test/): 39 tests against an in-memory model of the v3 contract, so every ordering of "payment / sale / activation / answer / settlement" can be forced):
+Contract and sale: three layers, each closer to reality (the runtime adds a fourth, [runtime/test](../runtime/test/): 50 tests (`bun test`), most against an in-memory model of the v3 contract, so every ordering of "payment / sale / activation / answer / settlement" can be forced):
 
 1. **Mock registry** ([escrow.rs](../contract/deed/tests/escrow.rs)): fast, and lets us force what real contracts won't (transfer failure, a name reverted to the escrow, FT-blocked listing).
 2. **Mainnet bytecode in a sandbox** ([real_fleet.rs](../contract/deed/tests/real_fleet.rs)): deploys the whole House of Stake fleet from the exact mainnet `.wasm` (hash-asserted), the same way [deploy/testnet.sh](../deploy/testnet.sh) does, rents a name, adds an agent and a hidden co-owner, sells, then attacks from the seller's side. Uses the real **300 Tgas** transaction cap.
