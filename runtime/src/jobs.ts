@@ -109,6 +109,9 @@ export interface Deps {
   /** sha256 of the service config this runtime runs; activations must name it. Unset = don't check. */
   configHash?: string
   now: () => number
+  /** How long to keep looking for a job that isn't on chain yet (ms). The runtime reads at "final"
+   *  finality, a few seconds behind a payment the wallet has just reported as executed. Default 8000. */
+  jobLagMs?: number
 }
 export interface JobInput {
   job_id: string
@@ -152,6 +155,11 @@ async function submitJobInner(d: Deps, input: JobInput): Promise<JobResult> {
   let ej: EscrowJob | null
   try {
     ej = await d.chain.job(input.job_id)
+    // A wallet can report pay_job as done before its block is final; give finality a few seconds.
+    for (let waited = 0, lag = d.jobLagMs ?? 8000; !ej && waited < lag; waited += 1000) {
+      await new Promise((r) => setTimeout(r, Math.min(1000, lag)))
+      ej = await d.chain.job(input.job_id)
+    }
   } catch (e) {
     return { http: 503, error: `Can't read your job on chain right now (${errMsg(e)}). Nothing was recorded; try again.` }
   }

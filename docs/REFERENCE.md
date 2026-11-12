@@ -84,11 +84,11 @@ Production build: `bun run build` (type-check + Vite build, output in `web/dist`
 (Or use the hosted one: `curl https://preflight-production-8802.up.railway.app/v1/health`. It runs [runtime/Dockerfile](../runtime/Dockerfile) on Railway with a persistent volume for the job ledger, so replay protection survives redeploys. Its only NEAR key is `RUNTIME_KEY`, a function-call key on `deedhq.testnet` limited to `settle_job` and `refund_job` on the Deed contract, with no deposit and a 0.5 NEAR gas allowance, made by [deploy/runtime-key.sh](../deploy/runtime-key.sh). A leaked key can settle or refund jobs, nothing else.)
 
 ```bash
-cd runtime && bun install && bun test     # 50 tests: escrowed job rules, sale mid-job, settle/refund on chain, replay (incl. after restart), fail-closed, TEE signature check, risk flags
+cd runtime && bun install && bun test     # 51 tests: escrowed job rules, sale mid-job, settle/refund on chain, replay (incl. after restart), fail-closed, TEE signature check, risk flags
 bun run start                             # http://localhost:8787  (set NEARAI_API_KEY in the repo-root .env to answer)
 curl localhost:8787/v1/health              # runtime id, model, config fingerprint, can_answer
 ```
-**You will see** `50 pass`, then the health JSON with `can_answer: true` (when the key is set) and `config_hash: 678ff1f4…`, the sha256 of [runtime/preflight.config.json](../runtime/preflight.config.json), which is also the fingerprint in the Deed's on-chain activation (version 4). With the runtime running, the web app's **Try Preflight** page shows free risk flags as you edit a transaction; paying needs a testnet wallet, and the answer appears with its three signature checks. If the AI step fails (or no key is set), the runtime calls `refund_job` and the contract returns the payment; if the runtime is down, anyone can call `refund_job` after 15 minutes.
+**You will see** `51 pass`, then the health JSON with `can_answer: true` (when the key is set) and `config_hash: 678ff1f4…`, the sha256 of [runtime/preflight.config.json](../runtime/preflight.config.json), which is also the fingerprint in the Deed's on-chain activation (version 4). With the runtime running, the web app's **Try Preflight** page shows free risk flags as you edit a transaction; paying needs a testnet wallet, and the answer appears with its three signature checks. If the AI step fails (or no key is set), the runtime calls `refund_job` and the contract returns the payment; if the runtime is down, anyone can call `refund_job` after 15 minutes.
 
 ### 5. Re-run the live sale on testnet (needs testnet NEAR)
 ```bash

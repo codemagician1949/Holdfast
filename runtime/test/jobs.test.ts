@@ -128,6 +128,7 @@ function deps(world: World, opts: { onExplain?: () => void | Promise<void>; fail
     escrow: ESCROW,
     configHash: CONFIG,
     now: () => T0,
+    jobLagMs: 0,
     calls: () => calls,
   }
   return d
@@ -158,6 +159,17 @@ describe("accept, serve, settle on chain", () => {
     expect(d.store.get(id)).toBeUndefined()
     expect(state(w, id)).toBe("Pending")
     expect(d.calls()).toBe(0)
+  })
+  test("a job the wallet reported before its block is final is found once it is (finality lag)", async () => {
+    const w = new World()
+    const d = { ...deps(w), jobLagMs: 3000 }
+    const id = w.pay()
+    const paid = w.jobs.get(id)!
+    w.jobs.delete(id) // not visible at "final" yet
+    setTimeout(() => w.jobs.set(id, paid), 1200)
+    const r = await submit(d, id)
+    expect(r.http).toBe(200)
+    expect(r.job?.status).toBe("served")
   })
   test("unknown job, job paid to another runtime, job no longer pending: refused, nothing recorded", async () => {
     const w = new World()

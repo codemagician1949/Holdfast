@@ -137,7 +137,7 @@ What earlier runs found:
 
 ## Testing strategy
 
-Contract and sale: three layers, each closer to reality (the runtime adds a fourth, [runtime/test](../runtime/test/): 50 tests (`bun test`), most against an in-memory model of the v3 contract, so every ordering of "payment / sale / activation / answer / settlement" can be forced):
+Contract and sale: three layers, each closer to reality (the runtime adds a fourth, [runtime/test](../runtime/test/): 51 tests (`bun test`), most against an in-memory model of the v3 contract, so every ordering of "payment / sale / activation / answer / settlement" can be forced):
 
 1. **Mock registry** ([escrow.rs](../contract/deed/tests/escrow.rs)): fast, and lets us force what real contracts won't (transfer failure, a name reverted to the escrow, FT-blocked listing).
 2. **Mainnet bytecode in a sandbox** ([real_fleet.rs](../contract/deed/tests/real_fleet.rs)): deploys the whole House of Stake fleet from the exact mainnet `.wasm` (hash-asserted), the same way [deploy/testnet.sh](../deploy/testnet.sh) does, rents a name, adds an agent and a hidden co-owner, sells, then attacks from the seller's side. Uses the real **300 Tgas** transaction cap.
