@@ -26,9 +26,15 @@ The service in the demo is **Preflight**: before you or your AI agent sign a NEA
 - **Counterparty checks for agents that pay:** a free allow / warn / block check, a shared blocklist contract, and an agent vault that refuses reported receivers on chain ([details](docs/DETAILS.md#for-agents-that-pay-track-security)).
 - **The web app**, and a **verifier** that attacks every sale from the seller's side and checks each claim on chain.
 
+**What Holdfast's own contracts enforce that House of Stake's don't** (sandbox tests in [contract/deed/tests/](contract/deed/tests/)):
+- **A sale in the middle of a paid job can't pay the new owner's name:** the customer is refunded. Test: `sale_in_the_middle_of_a_paid_job_refunds_the_payer`.
+- **The sale is all or nothing:** if the payout switch or the name transfer fails, the buyer gets the whole price back. Tests: `forced_transfer_failure_refunds_buyer`, `failed_payout_repoint_stops_the_sale_and_refunds_the_buyer`, and `failed_transfer_refunds_buyer_on_real_bytecode` on House of Stake's mainnet bytecode.
+- **An old activation can't be replayed:** only the current owner can switch the service on, and each activation needs a higher version than the last. Test: `activation_requires_current_owner`.
+- **Refunds never depend on the operator:** anyone can refund a job left unanswered for 15 minutes. Test: `job_refunds_never_depend_on_the_operator`.
+
 ## See it in 2 minutes (browser, no wallet)
 
-1. **https://holdfast-near.vercel.app/deed/preflight.deedbot.deedhq.testnet**: every line under **History** is a testnet transaction: two sales, the wallet wiping the seller's permissions, earnings paid out, and each refused attempt by the old owner with the chain's own error. **Jobs answered** lists paid answers with their enclave-signature checks.
+1. **https://holdfast-near.vercel.app/deed/preflight.deedbot.deedhq.testnet**: every line under **History** is a testnet transaction: six sales, the wallet wiping the seller's permissions, earnings paid out, and each refused attempt by the old owner with the chain's own error. **Jobs answered** lists paid answers with their enclave-signature checks.
 2. **https://holdfast-near.vercel.app/proof**: the live sale's attack run, one row per attempt, each linked to its transaction.
 3. **https://holdfast-near.vercel.app/try**: click an example transaction and watch the free risk flags and the check of who it pays.
 
