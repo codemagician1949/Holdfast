@@ -97,13 +97,13 @@ ERC-6551 gives each NFT a separate account whose control follows the token; on N
 
 - **Libraries:** Rust `near-sdk` 5.30, `near-workspaces` 0.24; Bun with `@noble/curves` and `@noble/hashes`; React 19, Vite, Tailwind 4, shadcn/ui (Base UI), motion, react-router, `@hot-labs/near-connect`. Services: NEAR RPC, FastNEAR APIs, NEAR AI Cloud. NEAR features used, with file paths: [docs/DETAILS.md](docs/DETAILS.md#near-features-used).
 - **Third-party code deployed unmodified:** House of Stake [`tla-contracts`](https://github.com/houseofstake/tla-contracts) mainnet bytecode, vendored with its hashes in [deploy/mainnet-wasm](deploy/mainnet-wasm/).
-- **AI-assisted development (Q-005):** the code, tests, scripts and docs were written with an AI coding assistant (Claude Code), directed and reviewed by the team. Design critiques we asked AI models for are in [docs/process/](docs/process/): working notes, not external validation.
+- **AI-assisted development (Q-005):** the code, tests, scripts and docs were written with an AI coding assistant (Claude Code), directed and reviewed by codemagician. Design critiques we asked AI models for are in [docs/process/](docs/process/): working notes, not external validation.
 - **Baseline (Q-003):** everything here was built during the hackathon, from 2026-11-02. The tag `pre-hackathon` marks the first commit ([9aab65e](https://github.com/codemagician1949/Holdfast/commit/9aab65e)) and `hackathon-submission` the final one: [everything built during the hackathon](https://github.com/codemagician1949/Holdfast/compare/pre-hackathon...hackathon-submission).
 
 ## Team and other submissions
 
-- GitHub: [codemagician1949](https://github.com/codemagician1949)
-- **Other projects by team members in this hackathon (Q-015):** none; Holdfast is this team's only submission. It shares no code, accounts or servers with any other project.
+- **Team:** codemagician ([codemagician1949](https://github.com/codemagician1949) on GitHub), a team of one.
+- **Other projects in this hackathon (Q-015):** none; Holdfast is codemagician's only submission. It shares no code, accounts or servers with any other project.
 
 ## Documents
 

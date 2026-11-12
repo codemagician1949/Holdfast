@@ -97,7 +97,7 @@ Cut order if behind: official-marketplace sale → second Deed → x402 (use dir
 What it is in 2 lines; "do X → see Y" steps runnable from a clean clone (`bun run verify` prints the attack report); threat model table; what's real vs planned; prior art (ERC-6551, ERC-7857/0G iNFT, Virtuals) and the NEAR-only difference; every NEAR feature with file paths (TLA, hos-wallet grants, NEP-641, NEP-171/177/181/297, NEP-591 global contract, NEAR AI verifiable inference, Intents if used); libraries + AI-written code disclosure (Q-005); LICENSE (MIT, present); the Q-015 statement that Deed is this team's only submission.
 
 ## Hackathon rules that bind us (docs/HACKATHON.md)
-- **Q-015 — settled 2026-11-05: Deed is a standalone project.** It belongs to a friend of the team, and no Deed team member is on another project in this hackathon. The README says Deed is this team's only submission; keep it that way. Deed shares no code, accounts or servers with any other project.
+- **Q-015 — settled: Holdfast (formerly Deed) is codemagician's project, a team of one (user, 2026-11-12).** codemagician is on no other project in this hackathon; the README says Holdfast is codemagician's only submission. It shares no code, accounts or servers with any other project.
 - Testnet-only is eligible (Q-010); TLA and Intents settlement may be mainnet-only → tiny, deliberate mainnet use with the human's OK. Mainnet costs are not reimbursed (Q-008).
 - Public repo by 14 Nov; X post with video from the team lead tagging @NEARProtocol #NEARHackathon; one submission per project, not editable; hosted demo a plus (keep up to 18–25 Nov).
 
@@ -121,7 +121,7 @@ What it is in 2 lines; "do X → see Y" steps runnable from a clean clone (`bun 
 - **2026-11-02 — Threat model v1 approved**; `deed` contract (activation + escrow + capped royalty) done with 9 sandbox tests (`contract/test.sh`).
 
 ## Open questions for the human
-1. ~~Q-015~~ — answered 2026-11-03 and confirmed 2026-11-05: Deed is a standalone project; no team member is on another project (README: no other submissions by this team).
+1. ~~Q-015~~ — answered: the team is codemagician alone (2026-11-12); no other projects (README: Holdfast is codemagician's only submission).
 2. ~~Mainnet spend~~ — closed: testnet only.
 3. Team lead name/email/X for the submission; prize NEAR account.
 4. ~~GitHub repo~~ — github.com/codemagician1949/Holdfast (public).
