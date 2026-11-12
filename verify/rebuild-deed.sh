@@ -42,7 +42,7 @@ if ! docker run --rm --platform linux/amd64 --entrypoint /bin/sh -v "$WORK:/prob
   echo "     and set DEED_REBUILD_DIR to a folder Docker shares, e.g. DEED_REBUILD_DIR=\$HOME/.cache verify/rebuild-deed.sh" >&2
   exit 2
 fi
-git clone -q https://github.com/codemagician1949/Deed "$WORK/src"
+git clone -q https://github.com/codemagician1949/Holdfast "$WORK/src"
 git -C "$WORK/src" checkout -q "$REV"
 # cargo-near copies the repo into its own temp folder ($TMPDIR) and mounts that copy in the container,
 # so its TMPDIR must be shared with Docker too.

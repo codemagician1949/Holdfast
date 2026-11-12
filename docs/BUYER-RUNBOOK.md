@@ -22,7 +22,7 @@ Record the buyer's screen in **one continuous take** from step 3 to step 8 (brow
 
 **4. Nothing to wait for.** The seller was paid in the sale transaction. A job paid before the sale and not yet settled is refunded to its customer by the contract, never paid into the buyer's name.
 
-**5. Buyer starts their own runtime.** Fork https://github.com/codemagician1949/Deed, then either:
+**5. Buyer starts their own runtime.** Fork https://github.com/codemagician1949/Holdfast, then either:
 - **Railway:** New project → Deploy from GitHub repo (the fork). It builds `runtime/Dockerfile` via `railway.json`. Add a volume mounted at `/data`. Variables: `RUNTIME_ID=<your-account.testnet>`, `NEARAI_API_KEY=<your key>`, `RUNTIME_KEY=<limited key>` (below). Generate a public domain.
 - **Docker:** from the repo root, `docker build -f runtime/Dockerfile -t preflight . && docker run -p 8787:8787 -v preflight-data:/data -e RUNTIME_ID=<your-account.testnet> -e NEARAI_API_KEY=<your key> -e RUNTIME_KEY=<limited key> preflight`, behind any public HTTPS URL.
 - **The limited key:** with near-cli-rs and your account's full key in the legacy keychain, `ROOT=<your-account.testnet> RUNTIME_ID=<your-account.testnet> DEED=deed.deedhq.testnet deploy/runtime-key.sh` adds a function-call key that can only call `settle_job`/`refund_job` on the Holdfast contract and writes it to `.env` as `RUNTIME_KEY`. Without it your runtime can't settle, so paid jobs are refunded after 15 minutes.

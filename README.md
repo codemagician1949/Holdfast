@@ -1,11 +1,11 @@
 # Holdfast
 
-[![ci](https://github.com/codemagician1949/Deed/actions/workflows/ci.yml/badge.svg)](https://github.com/codemagician1949/Deed/actions/workflows/ci.yml)
+[![ci](https://github.com/codemagician1949/Holdfast/actions/workflows/ci.yml/badge.svg)](https://github.com/codemagician1949/Holdfast/actions/workflows/ci.yml)
 
 **Holdfast makes a NEAR name a sellable, paid AI service.** The name (here `preflight.deedbot.deedhq.testnet`) is at once an NEP-171 NFT, a real NEAR account with its own wallet, and the identity of a paid service. Customers pay the name. When it's sold, House of Stake's audited wallet code wipes every permission the seller or their AI agents had and pays the seller what the name earned; Holdfast's escrow pays the price and the buyer switches the service on under their own name.
 
 - **Live app:** https://holdfast-near.vercel.app · **Live runtime:** https://preflight-production-8802.up.railway.app/v1/health
-- **Name:** this project was called **Deed** until 12 Nov 2026 and was renamed Holdfast because another NEAR Hackathon project, by a different team, is also called Deed (an NFT-owned keyless account with drain protection); the two were built independently and share no code. On-chain account names still say `deed` (`deed.deedhq.testnet`, `*.deedbot.deedhq.testnet`): renaming them would mean redeploying every contract and losing the recorded sales, attacks and jobs the evidence links to. The repo stays at github.com/codemagician1949/Deed, and the old web address deed-near.vercel.app still works.
+- **Name:** this project was called **Deed** until 12 Nov 2026 and was renamed Holdfast because another NEAR Hackathon project, by a different team, is also called Deed (an NFT-owned keyless account with drain protection); the two were built independently and share no code. On-chain account names still say `deed` (`deed.deedhq.testnet`, `*.deedbot.deedhq.testnet`): renaming them would mean redeploying every contract and losing the recorded sales, attacks and jobs the evidence links to. The repo moved from github.com/codemagician1949/Deed to github.com/codemagician1949/Holdfast (old links redirect), and the old web address deed-near.vercel.app still works.
 - **Tracks:** `nfts` (lead) · `security` (Preflight is also a free counterparty check for agents that pay, backed by an agent wallet that refuses reported receivers on chain) · `agents` (the Holdfast is a paid AI service an agent can call and pay on chain; selling it wipes every agent permission). How each track's prompt is answered: [Track fit](#track-fit) · **Network:** NEAR **testnet** only · **License:** MIT
 - The hosted runtime's answers are paid for by the team's NEAR AI Cloud credit. `/v1/health` reports the last model error, and the daily CI check fails (alerting the team) if NEAR AI refuses calls for credit or auth or the settle key runs low; meanwhile paid jobs are refunded on chain, never kept.
 
@@ -72,7 +72,7 @@ Not used: NEAR Intents and Chain Signatures (mainnet-only or not needed on testn
 ## Verify it in 5 minutes
 
 ```bash
-git clone https://github.com/codemagician1949/Deed && cd Deed
+git clone https://github.com/codemagician1949/Holdfast && cd Holdfast
 pip install dcap-qvl==0.7.1               # optional: verifies the Intel TDX quote locally (without it the checker asks Phala's hosted verifier)
 python3 verify/check-testnet.py --runtime https://preflight-production-8802.up.railway.app   # ~1-3 min, no wallet, no NEAR
 contract/test.sh                          # ~2-5 min (fetches the NEAR sandbox itself): 36 tests (`cargo test` prints 3+17+4 for deed, 5 reports, 6+1 agent-vault): deed 24 (21 in a local NEAR sandbox, 4 of those on House of Stake mainnet bytecode), reports 5, agent-vault 7 (1 in the sandbox with a real function-call key)
@@ -171,7 +171,7 @@ ERC-6551 gives each NFT a separate account whose control follows the token; on N
 ## Libraries, AI-written code and baseline
 
 - **Baseline:** everything in this repository was built during the hackathon window, from 2026-11-02 (first commit). No pre-hackathon code of ours.
-- **Tags (Q-003):** `pre-hackathon` marks the first commit ([9aab65e](https://github.com/codemagician1949/Deed/commit/9aab65e)); `hackathon-submission` will mark the final frozen commit. Everything built during the hackathon: [pre-hackathon...hackathon-submission](https://github.com/codemagician1949/Deed/compare/pre-hackathon...hackathon-submission) (this link works once the final tag is added).
+- **Tags (Q-003):** `pre-hackathon` marks the first commit ([9aab65e](https://github.com/codemagician1949/Holdfast/commit/9aab65e)); `hackathon-submission` will mark the final frozen commit. Everything built during the hackathon: [pre-hackathon...hackathon-submission](https://github.com/codemagician1949/Holdfast/compare/pre-hackathon...hackathon-submission) (this link works once the final tag is added).
 - **Third-party code deployed unmodified:** House of Stake [`tla-contracts`](https://github.com/houseofstake/tla-contracts) mainnet bytecode (registry and recovery at commit `bf0b65d`, the rest at `0925e0f`), fetched from mainnet and vendored in [deploy/mainnet-wasm](deploy/mainnet-wasm/) with its hashes.
 - **Libraries:** Rust `near-sdk` 5.30, `near-workspaces` 0.24; Bun runtime with `@noble/curves`, `@noble/hashes`; web: React 19, Vite, Tailwind 4, shadcn/ui (Base UI), motion, react-router, `@hot-labs/near-connect`. Services: NEAR RPC and FastNEAR APIs, NEAR AI Cloud. Tools: cargo-near 0.22, near-cli-rs 0.30.
 - **AI-assisted development (Q-005):** the code, tests, scripts and docs were written with an AI coding assistant (Claude Code), directed and reviewed by the team.

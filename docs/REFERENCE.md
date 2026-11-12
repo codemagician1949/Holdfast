@@ -21,7 +21,7 @@ The full reference behind the [README](../README.md): how to run every part, how
 - Optional, for testnet: `near-cli-rs` **0.30** (`cargo install near-cli-rs`)
 
 ```bash
-git clone https://github.com/codemagician1949/Deed && cd Deed
+git clone https://github.com/codemagician1949/Holdfast && cd Holdfast
 ```
 
 ### 1. Run every contract test (no account, no network spend; House of Stake bytecode is vendored in `deploy/mainnet-wasm`)

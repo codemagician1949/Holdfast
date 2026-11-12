@@ -247,7 +247,7 @@ if runtime:
     # NVIDIA's own attestation service) must both carry our nonce, and the TDX report data must bind the
     # model's signing address, the same address that signed the answers the runtime served.
     print("\n== 6. NEAR AI enclave attestation (fresh nonce, verified independently)")
-    UA = {"content-type": "application/json", "user-agent": "deed-verify/1.0 (+https://github.com/codemagician1949/Deed)"}
+    UA = {"content-type": "application/json", "user-agent": "deed-verify/1.0 (+https://github.com/codemagician1949/Holdfast)"}
     def post_ua(url, body):
         req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=UA)
         return json.load(urllib.request.urlopen(req, timeout=90))

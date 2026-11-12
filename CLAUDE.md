@@ -1,7 +1,7 @@
 # Deed — NEAR HACKATHON project memory (track: `nfts`)
 
 > Read this first, then `docs/RESEARCH.md` (verified facts with file/line references), `docs/process/PANEL.md` (why Deed was chosen and what the judges' models criticised), `docs/HACKATHON.md` (official rules — re-read the live https://nearhackathon.com/HACKATHON.md before submitting), `docs/TRACK-nfts.md` (the organizers' own prompt for this track).
-> Folder created 2026-11-02. Remote: github.com/codemagician1949/Deed (public); pushing to it is authorized, following §Git identity. Deadline **2026-11-14 23:59 UTC** (submissions open 1 Nov).
+> Folder created 2026-11-02. Remote: github.com/codemagician1949/Holdfast (public); pushing to it is authorized, following §Git identity. Deadline **2026-11-14 23:59 UTC** (submissions open 1 Nov).
 
 ## One line
 **Deed turns a NEAR name into a working AI service you can own, prove and sell — and when it's sold, NEAR's own wallet contract wipes the seller's agent permissions and pays them out in the same step.**
@@ -108,14 +108,14 @@ What it is in 2 lines; "do X → see Y" steps runnable from a clean clone (`bun 
 - User-facing errors say what went wrong and what to do next.
 
 ## Git identity and pushing (set by the team 2026-11-03)
-- Remote: `origin` = https://github.com/codemagician1949/Deed (public). The **only** contributor is `codemagician1949`.
+- Remote: `origin` = https://github.com/codemagician1949/Holdfast (public). The **only** contributor is `codemagician1949`.
 - Repo-local identity (already set): `codemagician1949 <278717673+codemagician1949@users.noreply.github.com>` (GitHub no-reply). Don't touch the global config; never commit a personal email.
 - **Before every push**: run `gh api user --jq .login`; if it isn't `codemagician1949`, run `gh auth switch -h github.com -u codemagician1949` first. (This machine has many gh accounts logged in.)
 - **Before every push**: `git log --format='%an %ae %cn %ce %b' | grep -iE "claude|anthropic"` must print nothing, and every author/committer must be codemagician1949. No Co-Authored-By trailers.
 - Small descriptive commits (AI judges read history).
 
 ## Decisions log
-- **2026-11-12 — Renamed Deed → Holdfast (user decision).** Another NEAR Hackathon entry by a different team is also called Deed (github.com/ClaudeOpusPremiumAgent/deed). Brand + web address only: README, docs, web text, runtime/verifier messages say Holdfast; new address holdfast-near.vercel.app (deed-near.vercel.app kept). Unchanged: on-chain account names (`deed.deedhq.testnet`, `*.deedbot.deedhq.testnet`), code identifiers, the holder sign-in message (`Deed holder sign-in`, verified byte-for-byte by the runtime), and the repo URL github.com/codemagician1949/Deed. This file still says "Deed" in its older sections; read it as Holdfast.
+- **2026-11-12 — Renamed Deed → Holdfast (user decision).** Another NEAR Hackathon entry by a different team is also called Deed (github.com/ClaudeOpusPremiumAgent/deed). Brand, web address and repo name: README, docs, web text, runtime/verifier messages say Holdfast; new address holdfast-near.vercel.app (deed-near.vercel.app kept). Unchanged: on-chain account names (`deed.deedhq.testnet`, `*.deedbot.deedhq.testnet`), code identifiers, the holder sign-in message (`Deed holder sign-in`, verified byte-for-byte by the runtime). The GitHub repo was renamed codemagician1949/Deed -> codemagician1949/Holdfast the same day (user request; old URLs redirect; contract Cargo.toml `repository` fields keep the old URL so rebuilds match the deployed bytecode). This file still says "Deed" in its older sections; read it as Holdfast.
 - **2026-11-02 — Testnet only, all through (team decision).** No mainnet spend. TLA isn't deployed on testnet (`registry.hos.testnet` doesn't exist), so we deploy the House of Stake contracts ourselves on testnet from the **exact mainnet bytecode**, under team-owned testnet accounts, and the verifier prints code hashes next to mainnet's. The README says plainly: "TLA on testnet = our deployment of the audited mainnet code; not House of Stake's." Mainnet open questions (renting names) are closed.
 - **2026-11-02 — UI bar:** "astonishing", well animated (`motion`), built on shadcn/ui, and understandable by anyone: plain words first, chain jargon behind a "details" toggle.
 - **2026-11-02 — Threat model v1 approved**; `deed` contract (activation + escrow + capped royalty) done with 9 sandbox tests (`contract/test.sh`).
@@ -124,4 +124,4 @@ What it is in 2 lines; "do X → see Y" steps runnable from a clean clone (`bun 
 1. ~~Q-015~~ — answered 2026-11-03 and confirmed 2026-11-05: Deed is a standalone project; no team member is on another project (README: no other submissions by this team).
 2. ~~Mainnet spend~~ — closed: testnet only.
 3. Team lead name/email/X for the submission; prize NEAR account.
-4. ~~GitHub repo~~ — github.com/codemagician1949/Deed (public).
+4. ~~GitHub repo~~ — github.com/codemagician1949/Holdfast (public).
