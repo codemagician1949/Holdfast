@@ -1,4 +1,4 @@
-// The Preflight job lifecycle (THREAT_MODEL.md §D), v3: payments are held on chain by the Deed contract.
+// The Preflight job lifecycle (THREAT_MODEL.md §D), v3: payments are held on chain by the Holdfast contract.
 //
 //   1. The customer calls `deed.pay_job(name, sha256(request))` with at least the activated price. The
 //      contract holds the money and records the job: payer, amount, the runtime and activation version it
@@ -56,7 +56,7 @@ export interface Answer {
   signature: { text: string; signature: string; signing_address: string; signing_algo: string } | null
   check: SignatureCheck | null
 }
-/** Named in the signed request, so a signed answer is bound to this Deed, job, runtime and config. */
+/** Named in the signed request, so a signed answer is bound to this Holdfast, job, runtime and config. */
 export interface JobContext {
   deed: string
   job_id: string
@@ -71,7 +71,7 @@ export interface Inference {
 export type JobStatus = "processing" | "served" | "refunded" | "refund_due" | "awaiting_activation"
 export interface Job {
   id: string
-  /** v3: the on-chain job id in the Deed contract (absent on pre-v3 jobs, whose id is a payment tx). */
+  /** v3: the on-chain job id in the Holdfast contract (absent on pre-v3 jobs, whose id is a payment tx). */
   escrowJobId?: string
   name: string
   payer: string
@@ -104,7 +104,7 @@ export interface Deps {
   inference: Inference
   store: Store
   runtimeId: string
-  /** The sale escrow (the Deed contract): it holds names while they are listed. */
+  /** The sale escrow (the Holdfast contract): it holds names while they are listed. */
   escrow: string
   /** sha256 of the service config this runtime runs; activations must name it. Unset = don't check. */
   configHash?: string
@@ -163,7 +163,7 @@ async function submitJobInner(d: Deps, input: JobInput): Promise<JobResult> {
   } catch (e) {
     return { http: 503, error: `Can't read your job on chain right now (${errMsg(e)}). Nothing was recorded; try again.` }
   }
-  if (!ej) return { http: 404, error: `No job ${input.job_id} in the Deed contract. Pay with pay_job first, then send the id it returned.` }
+  if (!ej) return { http: 404, error: `No job ${input.job_id} in the Holdfast contract. Pay with pay_job first, then send the id it returned.` }
   if (ej.runtime_id !== d.runtimeId) return { http: 403, error: `Job ${ej.id} was paid to runtime ${ej.runtime_id}, not this one (${d.runtimeId}). Send it there.` }
   if (ej.state !== "Pending") return { http: 409, error: `Job ${ej.id} is no longer pending on chain (${JSON.stringify(ej.state)}).` }
   if (requestHash(input.request) !== ej.request_hash) {
@@ -175,10 +175,10 @@ async function submitJobInner(d: Deps, input: JobInput): Promise<JobResult> {
     ;[owner, activation] = await Promise.all([d.chain.owner(ej.token_id), d.chain.activation(ej.token_id)])
     owner = await servingOwner(d, ej.token_id, owner)
   } catch (e) {
-    return { http: 503, error: `Can't verify the Deed's owner right now (${errMsg(e)}). Nothing was recorded; try again.` }
+    return { http: 503, error: `Can't verify the Holdfast's owner right now (${errMsg(e)}). Nothing was recorded; try again.` }
   }
   if (!(await stillSame(d, ej.token_id, owner, activation))) {
-    return { http: 503, error: "The Deed's ownership or activation changed while your job was being checked. Nothing was recorded; send it again." }
+    return { http: 503, error: "The Holdfast's ownership or activation changed while your job was being checked. Nothing was recorded; send it again." }
   }
 
   const now = new Date(d.now()).toISOString()
@@ -198,13 +198,13 @@ async function submitJobInner(d: Deps, input: JobInput): Promise<JobResult> {
     updatedAt: now,
   }
   if (!owner || !isEntitled(d, owner, activation) || activation!.version !== ej.activation_version) {
-    return refundOnChain(d, job, "The Deed changed hands or its service changed since you paid, so this runtime may not answer it. Your payment is returned on chain.", 409)
+    return refundOnChain(d, job, "The Holdfast changed hands or its service changed since you paid, so this runtime may not answer it. Your payment is returned on chain.", 409)
   }
   return serve(d, job)
 }
 
 /**
- * Who the service works for right now. While a Deed is listed, the sale escrow holds the name, but the
+ * Who the service works for right now. While a Holdfast is listed, the sale escrow holds the name, but the
  * seller still owns the business (the activation stays until the sale; payments made while listed reach
  * the seller at the sale, B3), so the seller's activation keeps serving until the sale or a cancel.
  */

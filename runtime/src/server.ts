@@ -1,10 +1,10 @@
-// Preflight HTTP API (v3: job payments are held on chain by the Deed contract).
+// Preflight HTTP API (v3: job payments are held on chain by the Holdfast contract).
 //   POST /v1/jobs          {job_id, request}  -> the answer; the job is then settled or refunded on chain
-//   GET  /v1/jobs?name=    public job record for a Deed: outcomes, verdicts, flags, enclave checks, hashes and
+//   GET  /v1/jobs?name=    public job record for a Holdfast: outcomes, verdicts, flags, enclave checks, hashes and
 //                          settlement txs. Customers' transactions and the explanations are left out.
 //   GET  /v1/jobs/:id      one job, same public view
 //   POST /v1/owner/jobs    {name, account, public_key, signature, nonce, issued_at}: the full record (questions
-//                          and answers), only for the Deed's CURRENT holder, proven by a NEP-413 signature
+//                          and answers), only for the Holdfast's CURRENT holder, proven by a NEP-413 signature
 //   POST /v1/flags         {request} -> deterministic risk flags (free)
 //   GET  /v1/health        what this runtime is and whether it can answer
 import { chain, settleKey } from "./chain"

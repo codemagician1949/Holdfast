@@ -20,7 +20,7 @@ type Step = "idle" | "paying" | "asking" | "done"
 export function TryPage() {
   const { deeds } = useDeeds()
   const { account, preview, connect, callValue } = useWallet()
-  // Switched on, including Deeds listed for sale (the seller's service keeps answering until the sale).
+  // Switched on, including Holdfasts listed for sale (the seller's service keeps answering until the sale).
   const serving = deeds.filter((d) => d.activation && (d.status === "serving" || d.status === "listed"))
   const [deedId, setDeedId] = useState<string>("")
   const deed = serving.find((d) => d.id === deedId) ?? serving[0]
@@ -32,7 +32,7 @@ export function TryPage() {
   const [offline, setOffline] = useState(false)
   const [step, setStep] = useState<Step>("idle")
   const [job, setJob] = useState<Job | null>(null)
-  // The runtime this Deed's owner switched on (may differ from the default after a buyer brings their own).
+  // The runtime this Holdfast's owner switched on (may differ from the default after a buyer brings their own).
   const deedRuntime = runtimeUrlFor(deed?.activation?.runtime_id, deed?.activation?.runtime_url)
   const [deedHealth, setDeedHealth] = useState<{ url: string; health: Health | null } | null>(null)
   useEffect(() => {
@@ -81,7 +81,7 @@ export function TryPage() {
   const ask = async () => {
     if (!deed || !parsed) return
     if (!checksPass) {
-      toast.error("Not safe to pay", { description: `The runtime at ${deedRuntime} isn't the one this Deed's owner switched on.` })
+      toast.error("Not safe to pay", { description: `The runtime at ${deedRuntime} isn't the one this Holdfast's owner switched on.` })
       return
     }
     if (!account || preview) {
@@ -91,7 +91,7 @@ export function TryPage() {
     try {
       setStep("paying")
       const price = deed.activation?.price_yocto ?? "0"
-      // The Deed contract holds the payment, bound to this exact question (sha256), until the runtime answers.
+      // The Holdfast contract holds the payment, bound to this exact question (sha256), until the runtime answers.
       const { hash, value } = await callValue({
         receiverId: CONFIG.deed,
         method: "pay_job",
@@ -118,10 +118,10 @@ export function TryPage() {
         <Aurora hue={200} />
         <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-8 sm:px-6">
           <Reveal className="max-w-2xl">
-            <div className="mb-3 text-xs font-medium tracking-[0.2em] text-primary uppercase">The service inside a Deed</div>
+            <div className="mb-3 text-xs font-medium tracking-[0.2em] text-primary uppercase">The service inside a Holdfast</div>
             <h1 className="font-heading text-5xl leading-none tracking-tight sm:text-7xl">Ask Preflight before you sign</h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Paste a NEAR transaction you're about to sign. You'll see the risk flags and a check of who it pays, for free. Pay the Deed {deed ? near(deed.service.priceNear) : "its price"} and
+              Paste a NEAR transaction you're about to sign. You'll see the risk flags and a check of who it pays, for free. Pay the Holdfast {deed ? near(deed.service.priceNear) : "its price"} and
               you get a plain-words explanation signed inside a secure enclave, so anyone can check it wasn't changed.
             </p>
           </Reveal>
@@ -203,9 +203,9 @@ export function TryPage() {
           </div>
 
           <div className="rounded-3xl border border-border bg-card p-5">
-            <div className="mb-3 text-sm font-medium">4. Pay a Deed and get the explanation</div>
+            <div className="mb-3 text-sm font-medium">4. Pay a Holdfast and get the explanation</div>
             {serving.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No Deed is switched on right now. <Link to="/market" className="underline">Browse Deeds</Link>.</p>
+              <p className="text-sm text-muted-foreground">No Holdfast is switched on right now. <Link to="/market" className="underline">Browse Holdfasts</Link>.</p>
             ) : (
               <>
                 <select
@@ -239,7 +239,7 @@ export function TryPage() {
                 <Button className="h-11 w-full rounded-xl" disabled={!parsed || offline || (deedHealth?.url === deedRuntime && !checksPass) || step === "paying" || step === "asking"} onClick={ask}>
                   {step === "paying" || step === "asking" ? <Loader2 className="animate-spin" /> : account && !preview ? <ScanSearch /> : <Wallet />}
                   {step === "paying"
-                    ? "Confirm the payment in your wallet (held by the Deed contract)…"
+                    ? "Confirm the payment in your wallet (held by the Holdfast contract)…"
                     : step === "asking"
                       ? "Checking the owner, asking the enclave, settling on chain…"
                       : account && !preview
@@ -247,10 +247,10 @@ export function TryPage() {
                         : "Connect a testnet wallet to pay"}
                 </Button>
                 <p className="mt-2 text-[11px] text-muted-foreground">
-                  Your payment is held by the Deed contract, bound to this exact question. When the answer is delivered it is paid into
-                  the Deed's own wallet; if anything fails, the contract returns it to you, and after 15 minutes anyone can trigger that refund.
+                  Your payment is held by the Holdfast contract, bound to this exact question. When the answer is delivered it is paid into
+                  the Holdfast's own wallet; if anything fails, the contract returns it to you, and after 15 minutes anyone can trigger that refund.
                   {deedHealth?.health && !deedHealth.health.can_answer && " Note: this runtime has no AI key configured, so paid jobs are refunded."}
-                  {deedHealth?.url === deedRuntime && !checksPass && " Paying is blocked: this runtime isn't the one the Deed's current activation names. If the owner runs their own, open this page with ?runtime=<their URL>."}
+                  {deedHealth?.url === deedRuntime && !checksPass && " Paying is blocked: this runtime isn't the one the Holdfast's current activation names. If the owner runs their own, open this page with ?runtime=<their URL>."}
                 </p>
               </>
             )}

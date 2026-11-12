@@ -1,5 +1,5 @@
-// Command-line client: how an agent (or a person with near-cli-rs) uses a Deed's Preflight service.
-// 1. reads the Deed's activation (price, runtime URL), 2. pays the Deed contract's job escrow with
+// Command-line client: how an agent (or a person with near-cli-rs) uses a Holdfast's Preflight service.
+// 1. reads the Holdfast's activation (price, runtime URL), 2. pays the Holdfast contract's job escrow with
 // pay_job(name, sha256(request)), 3. sends {job_id, request} to the runtime and prints the answer and how
 // the job settled on chain (paid to the name's wallet, or refunded).
 //
@@ -44,7 +44,7 @@ if (!activation) {
 runtime ||= (activation.runtime_url ?? `http://localhost:${CONFIG.port}`).replace(/\/$/, "")
 const priceNear = (Number(BigInt(activation.price_yocto) / 10n ** 18n) / 1e6).toString()
 const hash = requestHash(request)
-console.log(`Paying ${priceNear} NEAR into the Deed contract's escrow for ${deed} (switched on by ${activation.owner}, v${activation.version}, runtime ${activation.runtime_id})…`)
+console.log(`Paying ${priceNear} NEAR into the Holdfast contract's escrow for ${deed} (switched on by ${activation.owner}, v${activation.version}, runtime ${activation.runtime_id})…`)
 const pay = near("contract", "call-function", "as-transaction", CONFIG.deed, "pay_job", "json-args", JSON.stringify({ token_id: deed, request_hash: hash }),
   "prepaid-gas", "30 Tgas", "attached-deposit", `${priceNear} NEAR`, "sign-as", as, "network-config", "testnet", "sign-with-legacy-keychain", "send")
 const payTx = pay.out.match(/Transaction ID: ([1-9A-HJ-NP-Za-km-z]+)/)?.[1]

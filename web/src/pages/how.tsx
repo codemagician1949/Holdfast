@@ -32,7 +32,7 @@ const STEPS = [
 const FAQ = [
   {
     q: "What stops the seller from keeping access?",
-    a: "The account has no passwords or keys of its own. It's run by an audited wallet program, and every time ownership changes, that program wipes every permission the old owner or their AI agents had. Deed also checks who the owner is live, on every job.",
+    a: "The account has no passwords or keys of its own. It's run by an audited wallet program, and every time ownership changes, that program wipes every permission the old owner or their AI agents had. Holdfast also checks who the owner is live, on every job.",
   },
   {
     q: "What happens to money the service earned before the sale?",
@@ -44,7 +44,7 @@ const FAQ = [
   },
   {
     q: "What if I pay for an answer and nothing comes back?",
-    a: "Your payment never goes to the service's operator. The Deed contract holds it until the answer is delivered, then pays it into the Deed's own wallet. If anything fails, it goes back to you, and after 15 minutes anyone can trigger that refund.",
+    a: "Your payment never goes to the service's operator. The Holdfast contract holds it until the answer is delivered, then pays it into the Holdfast's own wallet. If anything fails, it goes back to you, and after 15 minutes anyone can trigger that refund.",
   },
   {
     q: "Can the seller take the secret recipe?",
@@ -52,7 +52,7 @@ const FAQ = [
   },
   {
     q: "Is this real money?",
-    a: "Deed runs on the NEAR testnet, where coins have no cash value. It's built so the same contracts can move to mainnet later.",
+    a: "Holdfast runs on the NEAR testnet, where coins have no cash value. It's built so the same contracts can move to mainnet later.",
   },
 ]
 
@@ -67,7 +67,7 @@ export function HowPage() {
         <Aurora hue={160} />
         <div className="relative mx-auto max-w-3xl px-4 pt-10 pb-16 text-center sm:px-6">
           <Reveal>
-            <h1 className="font-heading text-5xl tracking-tight sm:text-7xl">How Deed works</h1>
+            <h1 className="font-heading text-5xl tracking-tight sm:text-7xl">How Holdfast works</h1>
             <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">Four steps, and none of them needs you to trust a stranger.</p>
           </Reveal>
         </div>

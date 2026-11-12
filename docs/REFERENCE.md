@@ -1,4 +1,4 @@
-# Deed: technical reference
+# Holdfast: technical reference
 
 The full reference behind the [README](../README.md): how to run every part, how the sale works call by call, the live deployment, the contract API, the Preflight runtime and the web app. Threat model: [THREAT_MODEL.md](../THREAT_MODEL.md). Guarantees and where each is proven: [INVARIANTS.md](INVARIANTS.md). Live results: [EVIDENCE.md](EVIDENCE.md).
 
@@ -58,7 +58,7 @@ The test refuses to run if any `.wasm` hash differs from mainnet.
 RPC=https://rpc.testnet.fastnear.com
 view() { curl -s $RPC -H 'content-type: application/json' -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"query\",\"params\":{\"request_type\":\"call_function\",\"finality\":\"final\",\"account_id\":\"$1\",\"method_name\":\"$2\",\"args_base64\":\"$(printf '%s' "$3" | base64)\"}}" | python3 -c 'import sys,json;print(bytes(json.load(sys.stdin)["result"]["result"]).decode())'; }
 
-view registry.deedhq.testnet nft_token '{"token_id":"preflight.deedbot.deedhq.testnet"}'   # who owns the Deed (NEP-171)
+view registry.deedhq.testnet nft_token '{"token_id":"preflight.deedbot.deedhq.testnet"}'   # who owns the Holdfast (NEP-171)
 view preflight.deedbot.deedhq.testnet nft_item_info '{}'                                   # the account IS the NFT (sharded-item spec)
 view deed.deedhq.testnet get_activation '{"token_id":"preflight.deedbot.deedhq.testnet"}'  # who switched the service on
 view deed.deedhq.testnet get_latest_sale '{"token_id":"preflight.deedbot.deedhq.testnet"}' # the sale record
@@ -71,24 +71,24 @@ view preflight.deedbot.deedhq.testnet w_extensions '{}'                         
 cd web && bun install && bun run dev
 ```
 Open http://localhost:5173. Every page reads **NEAR testnet** directly (RPC for contract state, the FastNEAR transaction API for history; no backend). **You will see:**
-- `/`: what a Deed is, live totals, and **"Watch a sale"**: an 8-step animation of a sale (name moves, seller's keys break, earnings settle, seller paid in the same step, buyer switches it on).
-- `/market`: every Deed in the registry (`nft_tokens`), with filters and search.
+- `/`: what a Holdfast is, live totals, and **"Watch a sale"**: an 8-step animation of a sale (name moves, seller's keys break, earnings settle, seller paid in the same step, buyer switches it on).
+- `/market`: every Holdfast in the registry (`nft_tokens`), with filters and search.
 - `/deed/preflight.deedbot.deedhq.testnet`: the title page. Status, owner, price, and a **History** built from every transaction that touched the name: both live sales, each earnings sweep, each permission wipe, the royalty, and every blocked misuse attempt with the wallet's own error text; each line links to the transaction. Tabs for owners (with what was paid in during each holding), earnings, and on-chain facts (balance, payout account, lease, code hashes). **Buy** sends the real `buy` transaction from your wallet; the seller is paid in that same transaction.
 - `/proof`: **the live testnet run** (each step with its transaction link), then every attack as a card.
-- `/console`: locked until you connect. With a NEAR testnet wallet that owns a Deed you can switch the service on (runtime id, URL, price), list it or cancel a listing, and sign in (one signed message, checked on chain) to see the full job record with your customers' transactions, which the public ledger redacts. Without a wallet, *Or look around as an owner* opens a read-only preview of an owner's real view (it can't sign).
+- `/console`: locked until you connect. With a NEAR testnet wallet that owns a Holdfast you can switch the service on (runtime id, URL, price), list it or cancel a listing, and sign in (one signed message, checked on chain) to see the full job record with your customers' transactions, which the public ledger redacts. Without a wallet, *Or look around as an owner* opens a read-only preview of an owner's real view (it can't sign).
 
 Production build: `bun run build` (type-check + Vite build, output in `web/dist`).
 
 ### 4. Run the Preflight service
 
-(Or use the hosted one: `curl https://preflight-production-8802.up.railway.app/v1/health`. It runs [runtime/Dockerfile](../runtime/Dockerfile) on Railway with a persistent volume for the job ledger, so replay protection survives redeploys. Its only NEAR key is `RUNTIME_KEY`, a function-call key on `deedhq.testnet` limited to `settle_job` and `refund_job` on the Deed contract, with no deposit and a 0.5 NEAR gas allowance, made by [deploy/runtime-key.sh](../deploy/runtime-key.sh). A leaked key can settle or refund jobs, nothing else.)
+(Or use the hosted one: `curl https://preflight-production-8802.up.railway.app/v1/health`. It runs [runtime/Dockerfile](../runtime/Dockerfile) on Railway with a persistent volume for the job ledger, so replay protection survives redeploys. Its only NEAR key is `RUNTIME_KEY`, a function-call key on `deedhq.testnet` limited to `settle_job` and `refund_job` on the Holdfast contract, with no deposit and a 0.5 NEAR gas allowance, made by [deploy/runtime-key.sh](../deploy/runtime-key.sh). A leaked key can settle or refund jobs, nothing else.)
 
 ```bash
 cd runtime && bun install && bun test     # 51 tests: escrowed job rules, sale mid-job, settle/refund on chain, replay (incl. after restart), fail-closed, TEE signature check, risk flags
 bun run start                             # http://localhost:8787  (set NEARAI_API_KEY in the repo-root .env to answer)
 curl localhost:8787/v1/health              # runtime id, model, config fingerprint, can_answer
 ```
-**You will see** `51 pass`, then the health JSON with `can_answer: true` (when the key is set) and `config_hash: 678ff1f4…`, the sha256 of [runtime/preflight.config.json](../runtime/preflight.config.json), which is also the fingerprint in the Deed's on-chain activation (version 4). With the runtime running, the web app's **Try Preflight** page shows free risk flags as you edit a transaction; paying needs a testnet wallet, and the answer appears with its three signature checks. If the AI step fails (or no key is set), the runtime calls `refund_job` and the contract returns the payment; if the runtime is down, anyone can call `refund_job` after 15 minutes.
+**You will see** `51 pass`, then the health JSON with `can_answer: true` (when the key is set) and `config_hash: 678ff1f4…`, the sha256 of [runtime/preflight.config.json](../runtime/preflight.config.json), which is also the fingerprint in the Holdfast's on-chain activation (version 4). With the runtime running, the web app's **Try Preflight** page shows free risk flags as you edit a transaction; paying needs a testnet wallet, and the answer appears with its three signature checks. If the AI step fails (or no key is set), the runtime calls `refund_job` and the contract returns the payment; if the runtime is down, anyone can call `refund_job` after 15 minutes.
 
 ### 5. Re-run the live sale on testnet (needs testnet NEAR)
 ```bash
@@ -148,7 +148,7 @@ Top Level Accounts has **no House of Stake deployment on testnet**. To stay on t
 | `impl.deedhq.testnet` | global `hos-wallet` code (NEP-591) | `6d1FsQEpwVpgxALg4kCffXX45qujTL41bQSpWEHFoQ4o` | `impl.hos` (same) |
 | `deedbot.deedhq.testnet` | registrar for our TLA | `DavYBFdXPsa9qa6QEyiaUxodV6pax2y8Sp3XoriCNj3t` | mainnet registrar (same) |
 | `rec.deedhq.testnet` | `mpc-recovery` (watchers: random keys) | `HgacdGnQfkZ68W43VuqL9uZbY5JUXL2Gt9hrTWYU3eXw` | `rec.hos` (same) |
-| `deed.deedhq.testnet` | **Deed contract** | see [deploy/testnet.json](../deploy/testnet.json) | n/a |
+| `deed.deedhq.testnet` | **Holdfast contract** | see [deploy/testnet.json](../deploy/testnet.json) | n/a |
 | `reports.deedhq.testnet` | **shared blocklist** ([contract/reports](../contract/reports/src/lib.rs)) | see deploy/testnet.json | n/a |
 | `agent-vault.deedhq.testnet` | **an agent's wallet** ([contract/agent-vault](../contract/agent-vault/src/lib.rs)); owner `amara-deed.testnet`; the agent's only key: function-call, `pay` | see deploy/testnet.json | n/a |
 | `watchdog.deedhq.testnet` | the reporter the vault trusts (team-run) | no code | n/a |
@@ -187,18 +187,18 @@ Names under the replica look like `<label>.deedbot.deedhq.testnet` (a testnet ac
 
 ## The Preflight service (runtime)
 
-[runtime/](../runtime/) (Bun + TypeScript) is the service a Deed runs: before an agent or person signs a NEAR transaction, it pays the Deed and gets a plain-words explanation with risk flags, answered by a verifiable model.
+[runtime/](../runtime/) (Bun + TypeScript) is the service a Holdfast runs: before an agent or person signs a NEAR transaction, it pays the Holdfast and gets a plain-words explanation with risk flags, answered by a verifiable model.
 
 | Endpoint | What |
 |---|---|
 | `POST /v1/check {tx, agent_id?}` | counterparty check for agents that pay, free: `verdict` allow / warn / block, `reasons[]` (code, verdict, account, message, source), the signals per counterparty (exists, contract, existed 7 days ago, code changed, tx count, prior transactions from this agent, reports, dispute) and the policy used (the agent-vault's trusted reporters if `agent_id` is one) ([src/counterparty.ts](../runtime/src/counterparty.ts)) |
 | `POST /v1/flags {request}` | deterministic risk flags, free ([src/risk.ts](../runtime/src/risk.ts): full-access keys, account deletion, contract deploys, unlimited approvals, large values, asset moves, unusual receivers…) |
 | `POST /v1/jobs {job_id, request}` | serve an escrowed job: the runtime reads `get_job(job_id)` on chain and serves only if it is pending, names this runtime, its `request_hash` equals sha256 of `request`, and the activation it was paid under is the current owner's; then settles or refunds it on chain |
-| `GET /v1/jobs?name=` | public job ledger, customers' transactions redacted (shown in the Deed page's **Jobs answered** tab) |
+| `GET /v1/jobs?name=` | public job ledger, customers' transactions redacted (shown in the Holdfast page's **Jobs answered** tab) |
 | `POST /v1/owner/jobs {name, account_id, public_key, signature, issued_at}` | the full record for the holder: a NEP-413 signed message (recipient `deed-console`) by a full-access key of the current owner (or the live listing's seller), at most 10 minutes old ([src/owner.ts](../runtime/src/owner.ts)) |
 | `GET /v1/config`, `GET /v1/config/raw`, `GET /v1/health` | the published service config, its exact bytes (sha256 = the activated fingerprint) and health (`can_answer`, `can_settle`) |
 
-**Job rules** ([src/jobs.ts](../runtime/src/jobs.ts), from THREAT_MODEL §D, written before the code). The money rules live in the contract: a job pays the name only if `settle_job` finds the job's owner still owns it, otherwise it is refunded, and anyone can refund it after 15 minutes. The runtime adds: serve only a pending job that names this runtime, whose request hash matches, and whose activation is the one a fresh owner read says is current (read twice; if anything moved between the reads, nothing is recorded); the signed model request names the Deed, job, runtime and config; one answer per job; failures refund on chain; RPC trouble refuses; a crash mid-answer is refunded on restart, and settlements interrupted by an RPC error are retried. While a Deed is listed, the seller of the live listing counts as the owner. Who owes what across a sale: [THREAT_MODEL.md](../THREAT_MODEL.md#who-owes-what-across-a-sale-contract-v3).
+**Job rules** ([src/jobs.ts](../runtime/src/jobs.ts), from THREAT_MODEL §D, written before the code). The money rules live in the contract: a job pays the name only if `settle_job` finds the job's owner still owns it, otherwise it is refunded, and anyone can refund it after 15 minutes. The runtime adds: serve only a pending job that names this runtime, whose request hash matches, and whose activation is the one a fresh owner read says is current (read twice; if anything moved between the reads, nothing is recorded); the signed model request names the Holdfast, job, runtime and config; one answer per job; failures refund on chain; RPC trouble refuses; a crash mid-answer is refunded on restart, and settlements interrupted by an RPC error are retried. While a Holdfast is listed, the seller of the live listing counts as the owner. Who owes what across a sale: [THREAT_MODEL.md](../THREAT_MODEL.md#who-owes-what-across-a-sale-contract-v3).
 
 **Verifiable answers** ([src/nearai.ts](../runtime/src/nearai.ts), [src/tee.ts](../runtime/src/tee.ts)): the model (`z-ai/glm-5.3-flash`, run by NEAR AI in a TEE) answers; the runtime fetches the enclave's signature over `model:sha256(request bytes):sha256(response bytes)`, re-hashes the exact bytes it sent and received, and recovers the secp256k1 (EIP-191) signer, then checks that signer is listed in NEAR AI's attestation report for the model (`/v1/attestation/report`, Intel TDX + NVIDIA evidence; cached 10 min). All three checks are stored with the job and shown on the page. **Trust boundary:** the runtime trusts NEAR AI's report for the signer list; `verify/check-testnet.py` §6 independently verifies the report with a fresh nonce (Intel TDX quote verified locally with `dcap-qvl` against Intel PCS collateral, report data = signing address + nonce; GPU evidence via NVIDIA's attestation service). The runtime's own logic (owner checks, ledger, refunds) runs on an ordinary server, not in a TEE. An authentic answer isn't necessarily a correct one.
 
@@ -218,15 +218,15 @@ React 19 + Vite + TypeScript + Tailwind v4 + [shadcn/ui](https://ui.shadcn.com) 
 
 | Route | Purpose | Data today |
 |---|---|---|
-| `/` | what a Deed is; live totals; animated sale explainer | **live** |
-| `/market` | every Deed in the registry, filter/search | **live** |
+| `/` | what a Holdfast is; live totals; animated sale explainer | **live** |
+| `/market` | every Holdfast in the registry, filter/search | **live** |
 | `/deed/:id` | title page: status, stats, on-chain history, owners, earnings, on-chain facts; real buy and release-payment | **live** + wallet |
 | `/how` | four steps + FAQ | static |
 | `/proof` | live testnet run report with tx links + every attack | **live report** ([web/public/report-testnet.json](../web/public/report-testnet.json)) |
 | `/console` | owner console, opens only for the current registry owner: switch on/update price, list, cancel | **live** + wallet (read-only preview without one) |
-| `/try` | Try Preflight: free risk flags, pay the Deed, get the signed explanation | runtime + wallet |
+| `/try` | Try Preflight: free risk flags, pay the Holdfast, get the signed explanation | runtime + wallet |
 
-How history is built ([web/src/lib/live.ts](../web/src/lib/live.ts)): fetch every transaction that touched the name and the Deed contract, decode the NEP-297 events (`nep171:nft_transfer`, `hos_tla_tenant_wallet:swept_near`, `spend_granted`, `spend_charged`, `wallet:extension_added`, `hos_tla_extension:force_transfer_completed`, every `deed:*` event), plain transfers into the name (payments; from our own `*.deedhq.testnet` accounts they're labelled *our demo*, from anyone else *outside account*, which alone doesn't prove independent demand), and failed calls into the wallet or registry (misuse attempts). Requests are shared and cached briefly because the public APIs are rate-limited.
+How history is built ([web/src/lib/live.ts](../web/src/lib/live.ts)): fetch every transaction that touched the name and the Holdfast contract, decode the NEP-297 events (`nep171:nft_transfer`, `hos_tla_tenant_wallet:swept_near`, `spend_granted`, `spend_charged`, `wallet:extension_added`, `hos_tla_extension:force_transfer_completed`, every `deed:*` event), plain transfers into the name (payments; from our own `*.deedhq.testnet` accounts they're labelled *our demo*, from anyone else *outside account*, which alone doesn't prove independent demand), and failed calls into the wallet or registry (misuse attempts). Requests are shared and cached briefly because the public APIs are rate-limited.
 
 ---
 
@@ -236,7 +236,7 @@ How history is built ([web/src/lib/live.ts](../web/src/lib/live.ts)): fetch ever
 THREAT_MODEL.md              threat model, written before code
 contract/
   rust-toolchain.toml        pinned Rust 1.97.1 + wasm target
-  deed/src/lib.rs            the Deed contract (activation, escrow, royalty, events)
+  deed/src/lib.rs            the Holdfast contract (activation, escrow, royalty, events)
   deed/tests/escrow.rs       17 sandbox tests vs the mock registry (forced failures, name returned to escrow, pricing)
   deed/tests/real_fleet.rs   full sale vs House of Stake MAINNET bytecode, 19 checks, 300 Tgas cap
   mock-registry/             test-only registry stand-in

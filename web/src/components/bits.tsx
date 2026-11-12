@@ -25,11 +25,12 @@ export function SealLogo({ className }: { className?: string }) {
         style={{ transformOrigin: "20px 18px" }}
       />
       <motion.path
-        d="M14 12.5h5.2c3.6 0 6 2.3 6 5.5s-2.4 5.5-6 5.5H14z"
+        d="M15.5 12.5v11M24.5 12.5v11M15.5 18h9"
         fill="none"
         stroke="oklch(0.25 0.04 60)"
         strokeWidth="2.2"
         strokeLinejoin="round"
+        strokeLinecap="round"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
         transition={{ duration: 0.9, delay: 0.25, ease: "easeInOut" }}

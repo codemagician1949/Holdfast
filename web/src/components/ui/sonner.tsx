@@ -2,7 +2,7 @@ import { Toaster as Sonner, type ToasterProps } from "sonner"
 import { CircleCheckIcon, InfoIcon, TriangleAlertIcon, OctagonXIcon, Loader2Icon } from "lucide-react"
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  // Deed toggles a `dark` class on <html>; follow it.
+  // Holdfast toggles a `dark` class on <html>; follow it.
   const theme = document.documentElement.classList.contains("dark") ? "dark" : "light"
 
   return (

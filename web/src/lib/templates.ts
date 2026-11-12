@@ -1,4 +1,4 @@
-// Service templates a Deed can run, keyed by the public config fingerprint (config_hash) the owner
+// Service templates a Holdfast can run, keyed by the public config fingerprint (config_hash) the owner
 // signs at activation. Preflight is served by runtime/ (Bun), which answers only for the current owner.
 export interface Template {
   title: string
@@ -36,7 +36,7 @@ export function templateFor(hash: string | null): Template {
     title: hash ? "Custom service" : "Not switched on",
     tagline: hash
       ? "An AI service with a custom public config."
-      : "A Deed with no active service. Its owner can switch one on.",
+      : "A Holdfast with no active service. Its owner can switch one on.",
     model: hash ? "custom" : "none",
   }
 }

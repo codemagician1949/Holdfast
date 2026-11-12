@@ -20,7 +20,7 @@ const STEPS = [
 
 type Phase = "review" | "signing" | "done" | "failed"
 
-/** Buys a listed Deed with the connected NEAR testnet wallet (one transaction). */
+/** Buys a listed Holdfast with the connected NEAR testnet wallet (one transaction). */
 export function BuyDialog({
   deed,
   open,
@@ -122,7 +122,7 @@ export function BuyDialog({
           {phase === "done" && (
             <motion.div key="done" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="rounded-2xl border border-success/30 bg-success/10 p-4 text-center text-sm">
               <div className="font-medium text-success">It's yours.</div>
-              <p className="text-muted-foreground">Open "My Deeds" to switch the service on under your name.</p>
+              <p className="text-muted-foreground">Open "My Holdfasts" to switch the service on under your name.</p>
               {hash && (
                 <a href={explorerTx(hash)} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs underline">
                   View transaction <ExternalLink className="size-3" />
@@ -176,7 +176,7 @@ function LeaseNote({ leaseUntil }: { leaseUntil: string }) {
   return (
     <p className={soon ? "-mt-1 text-xs font-medium text-destructive" : "-mt-1 text-xs text-muted-foreground"}>
       The name is rented until {new Date(leaseUntil).toISOString().slice(0, 10)} ({days} days).
-      {soon ? " Under 30 days: the Deed contract will refuse this purchase and refund you in full. Ask the seller to renew it first." : " After that it must be renewed. (The contract refuses any sale with under 30 days left.)"}
+      {soon ? " Under 30 days: the Holdfast contract will refuse this purchase and refund you in full. Ask the seller to renew it first." : " After that it must be renewed. (The contract refuses any sale with under 30 days left.)"}
     </p>
   )
 }

@@ -16,7 +16,7 @@ type Call = (p: CallParams) => Promise<string>
 
 /** Buyer pays exactly the listed price; the escrow hands over the name or refunds. */
 export const buy = (call: Call, d: LiveDeed) => {
-  if (!d.listingRaw) throw new Error("This Deed is not for sale.")
+  if (!d.listingRaw) throw new Error("This Holdfast is not for sale.")
   return call({
     receiverId: CONFIG.deed,
     method: "buy",

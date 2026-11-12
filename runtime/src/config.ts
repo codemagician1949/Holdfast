@@ -33,7 +33,7 @@ export const CONFIG = {
   runtimeId: process.env.RUNTIME_ID ?? (deploy.root as string),
   nearAiBase: process.env.NEARAI_BASE ?? "https://cloud-api.near.ai/v1",
   nearAiKey: process.env.NEARAI_API_KEY ?? "",
-  /** Function-call key of runtimeId, limited to settle_job/refund_job on the Deed contract (deploy/runtime-key.sh). */
+  /** Function-call key of runtimeId, limited to settle_job/refund_job on the Holdfast contract (deploy/runtime-key.sh). */
   runtimeKey: process.env.RUNTIME_KEY ?? "",
   port: Number(process.env.PORT ?? 8787),
   dataFile: process.env.JOBS_FILE ?? join(here, "..", "data", "jobs.json"),

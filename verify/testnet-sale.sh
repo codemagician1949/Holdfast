@@ -105,7 +105,7 @@ try: print(int(json.load(sys.stdin)["price_yocto"]))  # exact yoctoNEAR (a float
 except Exception: pass')
   [ -n "$JOB_PRICE" ] && break; sleep 3
 done
-[ -n "$JOB_PRICE" ] || { echo "ERROR: couldn't read the Deed's price from get_activation (RPC trouble?). Nothing paid; re-run."; exit 1; }
+[ -n "$JOB_PRICE" ] || { echo "ERROR: couldn't read the Holdfast's price from get_activation (RPC trouble?). Nothing paid; re-run."; exit 1; }
 pay_job() { # desc -> sets JOB to the new job id
   local out code; out=$(near contract call-function as-transaction "$DEED" pay_job json-args "{\"token_id\":\"$NAME\",\"request_hash\":\"$REQ_HASH\"}" prepaid-gas '30 Tgas' attached-deposit "$JOB_PRICE yoctoNEAR" sign-as "$BUYER" $NET $SIGN 2>&1); code=$?
   record job ok "$1" "$code" "$out"
@@ -113,7 +113,7 @@ pay_job() { # desc -> sets JOB to the new job id
   JOB=$(q "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tx\",\"params\":{\"tx_hash\":\"$h\",\"sender_account_id\":\"$BUYER\",\"wait_until\":\"FINAL\"}}" \
     | python3 -c 'import sys,json,base64;print(json.loads(base64.b64decode(json.load(sys.stdin)["result"]["status"]["SuccessValue"])))')
 }
-pay_job "A customer pays for a job: the Deed contract holds the payment"
+pay_job "A customer pays for a job: the Holdfast contract holds the payment"
 N0=$(balance "$NAME")
 tx J1 ok "The runtime delivers and settles the job" "$ROOT" "$DEED" settle_job "{\"job_id\":\"$JOB\",\"answer_hash\":\"$REQ_HASH\"}" "0 NEAR" "100 Tgas"
 sleep 2; N1=$(balance "$NAME")
@@ -141,7 +141,7 @@ PAYOUT=$(view "$NAME" hos_payout_account '{}' | tr -d '"')
 OUT=$(near tokens "$ROOT" send-near "$NAME" "$EARN" $NET $SIGN 2>&1); record earn ok "A customer pays $EARN into the name while it is listed" $? "$OUT"
 # v3: the seller's service keeps answering while listed.
 pay_job "While listed, a customer pays for a job (the seller's activation is still current)"
-tx J3 ok "The runtime settles it while the Deed is listed" "$ROOT" "$DEED" settle_job "{\"job_id\":\"$JOB\",\"answer_hash\":\"$REQ_HASH\"}" "0 NEAR" "100 Tgas"
+tx J3 ok "The runtime settles it while the Holdfast is listed" "$ROOT" "$DEED" settle_job "{\"job_id\":\"$JOB\",\"answer_hash\":\"$REQ_HASH\"}" "0 NEAR" "100 Tgas"
 J3STATE=$(view "$DEED" get_job "{\"job_id\":\"$JOB\"}" | python3 -c 'import sys,json;print("Settled" if "Settled" in json.dumps(json.load(sys.stdin)["state"]) else "other")')
 [ "$J3STATE" = Settled ]; record J3 ok "A job paid while listed is paid into the name (it reaches the seller at the sale, B3)" $? ""
 sleep 3; KB=$(balance "$SELLER")

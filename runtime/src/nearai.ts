@@ -39,7 +39,7 @@ export const nearAi: Inference = {
       messages: [
         { role: "system", content: SERVICE.system_prompt },
         // The job context is part of the signed request bytes, so an enclave-signed answer is bound to this
-        // Deed, this on-chain job, this runtime and this config, and can't be passed off as another job's.
+        // Holdfast, this on-chain job, this runtime and this config, and can't be passed off as another job's.
         { role: "user", content: JSON.stringify({ ...(job ? { job } : {}), transaction: tx, risk_flags: flags }) },
       ],
       max_tokens: SERVICE.max_tokens,

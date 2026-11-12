@@ -17,7 +17,7 @@ import { OWNER_RECIPIENT, ownerJobs, ownerMessage, runtimeUrlFor, type Job } fro
 import { CONFIG } from "@/lib/config"
 import type { LiveDeed } from "@/lib/live"
 
-/** Gated: shows only Deeds the connected account owns right now (read live from the registry). */
+/** Gated: shows only Holdfasts the connected account owns right now (read live from the registry). */
 export function ConsolePage() {
   const { account, preview } = useWallet()
   const { deeds, loading, reload } = useDeeds()
@@ -48,7 +48,7 @@ export function ConsolePage() {
                 </motion.div>
                 <h1 className="mt-8 font-heading text-5xl tracking-tight">Owners only</h1>
                 <p className="mt-3 text-muted-foreground">
-                  This room opens only for whoever owns a Deed right now, checked live against the registry. The moment you sell,
+                  This room opens only for whoever owns a Holdfast right now, checked live against the registry. The moment you sell,
                   it locks for you and opens for the buyer.
                 </p>
                 <Button className="mt-6 h-11 rounded-full px-6" onClick={() => setConnectOpen(true)}>
@@ -67,7 +67,7 @@ export function ConsolePage() {
                         </span>
                       )}
                     </div>
-                    <h1 className="mt-2 font-heading text-5xl tracking-tight sm:text-6xl">Your Deeds</h1>
+                    <h1 className="mt-2 font-heading text-5xl tracking-tight sm:text-6xl">Your Holdfasts</h1>
                   </div>
                   <div className="flex items-center gap-2">
                     <SampleBadge />
@@ -81,9 +81,9 @@ export function ConsolePage() {
                   <div className="mt-10 h-56 animate-pulse rounded-3xl bg-muted/40" />
                 ) : mine.length === 0 ? (
                   <div className="mt-10 rounded-3xl border border-dashed border-border p-10 text-center text-muted-foreground">
-                    The registry says <span className="font-mono text-foreground">{account}</span> doesn't own a Deed right now.{" "}
+                    The registry says <span className="font-mono text-foreground">{account}</span> doesn't own a Holdfast right now.{" "}
                     <Link to="/market" className="text-foreground underline underline-offset-4">
-                      Browse Deeds
+                      Browse Holdfasts
                     </Link>
                     .
                   </div>
@@ -208,7 +208,7 @@ function OwnedDeed({ deed, onDone }: { deed: LiveDeed; onDone: () => void }) {
           </div>
           <div className="space-y-3 bg-card p-6">
             <div className="flex items-center gap-2 font-medium">
-              <Tag className="size-4" /> Sell this Deed
+              <Tag className="size-4" /> Sell this Holdfast
             </div>
             <p className="text-sm text-muted-foreground">
               Listing hands the name to the escrow. The wallet pays out what's in it to you and wipes every agent permission right away.
@@ -241,7 +241,7 @@ function OwnedDeed({ deed, onDone }: { deed: LiveDeed; onDone: () => void }) {
 /**
  * Holder-only: the full questions and answers customers paid for. The runtime releases them only after
  * checking a fresh NEP-413 signature by the wallet, that the key belongs to the account, and that the
- * account holds the Deed right now (read on chain), so this gate is enforced by the server, not the page.
+ * account holds the Holdfast right now (read on chain), so this gate is enforced by the server, not the page.
  */
 function HolderJobs({ deed }: { deed: LiveDeed }) {
   const { account, signMessage } = useWallet()
@@ -271,7 +271,7 @@ function HolderJobs({ deed }: { deed: LiveDeed }) {
       {jobs === null ? (
         <>
           <p className="text-sm text-muted-foreground">
-            The public page shows outcomes and signatures only. Sign a message in your wallet (no fee) to prove you hold this Deed right now; the runtime
+            The public page shows outcomes and signatures only. Sign a message in your wallet (no fee) to prove you hold this Holdfast right now; the runtime
             checks it against the registry and shows you every question and answer.
           </p>
           <Button variant="outline" className="rounded-full" disabled={busy} onClick={open}>

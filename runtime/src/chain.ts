@@ -1,4 +1,4 @@
-// Real chain access for the job rules: registry owner, the Deed's activation and listing, the escrowed
+// Real chain access for the job rules: registry owner, the Holdfast's activation and listing, the escrowed
 // job, and the runtime's two writes (settle_job / refund_job). Every read is fresh (no cache); any read
 // failure throws so the caller fails closed.
 import { CONFIG } from "./config"

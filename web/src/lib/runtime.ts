@@ -12,7 +12,7 @@ export interface ProposedTx {
 }
 export interface Job {
   id: string
-  /** v3: the on-chain job id in the Deed contract. */
+  /** v3: the on-chain job id in the Holdfast contract. */
   escrowJobId?: string
   name: string
   payer: string
@@ -76,7 +76,7 @@ export function runtimeOverride(): string | null {
 }
 
 /**
- * Where to reach the runtime a Deed's activation names: ?runtime= override, then the URL the owner
+ * Where to reach the runtime a Holdfast's activation names: ?runtime= override, then the URL the owner
  * recorded on chain in the activation, then the directory, then the default.
  */
 export function runtimeUrlFor(runtimeId: string | null | undefined, runtimeUrl?: string | null): string {
@@ -86,7 +86,7 @@ export function runtimeUrlFor(runtimeId: string | null | undefined, runtimeUrl?:
   )
 }
 
-/** Every runtime we know of (to collect a Deed's jobs across runtime changes). */
+/** Every runtime we know of (to collect a Holdfast's jobs across runtime changes). */
 export function knownRuntimes(): string[] {
   return Array.from(new Set([runtimeOverride(), ...Object.values(CONFIG.runtimes).map(strip), strip(CONFIG.runtime)].filter((u): u is string => !!u)))
 }
@@ -100,7 +100,7 @@ export const runtimeHealth = (base?: string) => call<Health>("/v1/health", undef
 
 /**
  * The client-side checks of docs/CLIENTS.md (3 and 4): the runtime we're about to pay through is the one
- * the Deed's current activation names, running the exact config the owner signed.
+ * the Holdfast's current activation names, running the exact config the owner signed.
  */
 export function serviceChecks(
   health: Health | null,
@@ -141,14 +141,14 @@ export async function requestHash(request: ProposedTx): Promise<string> {
 export const OWNER_RECIPIENT = "deed-console"
 export const ownerMessage = (name: string, issuedAt: string) => `Deed holder sign-in\nDeed: ${name}\nIssued: ${issuedAt}`
 
-/** The full job record (questions and answers) for the Deed's current holder, proven by a NEP-413 signature. */
+/** The full job record (questions and answers) for the Holdfast's current holder, proven by a NEP-413 signature. */
 export const ownerJobs = (base: string, body: { name: string; account: string; public_key: string; signature: string; nonce: string; issued_at: string }) =>
   call<{ error?: string; jobs?: Job[] }>("/v1/owner/jobs", { method: "POST", body: JSON.stringify(body) }, base)
 
 export const submitJob = (base: string, input: { job_id: string; request: ProposedTx }) =>
   call<{ error?: string; job?: Job }>("/v1/jobs", { method: "POST", body: JSON.stringify(input) }, base)
 
-/** A Deed's jobs from every known runtime (after a buyer switches runtimes, older jobs stay on the old one). Rejects only if none answers. */
+/** A Holdfast's jobs from every known runtime (after a buyer switches runtimes, older jobs stay on the old one). Rejects only if none answers. */
 export async function jobsFor(name: string): Promise<Job[]> {
   const results = await Promise.allSettled(knownRuntimes().map((b) => call<{ jobs: Job[] }>(`/v1/jobs?name=${encodeURIComponent(name)}`, undefined, b).then((r) => r.body.jobs)))
   const ok = results.filter((r): r is PromiseFulfilledResult<Job[]> => r.status === "fulfilled")

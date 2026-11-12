@@ -69,10 +69,10 @@ export function DeedPage() {
   if (!deed) {
     return (
       <Page className="mx-auto max-w-xl px-4 py-32 text-center">
-        <h1 className="font-heading text-5xl">No Deed called “{id}”</h1>
+        <h1 className="font-heading text-5xl">No Holdfast called “{id}”</h1>
         <p className="mt-3 text-muted-foreground">The registry has no name like that. Check the spelling, or browse the ones that exist.</p>
         <Button className="mt-6 rounded-full" render={<Link to="/market" />}>
-          Browse Deeds
+          Browse Holdfasts
         </Button>
       </Page>
     )
@@ -91,7 +91,7 @@ export function DeedPage() {
         <div className="relative mx-auto max-w-6xl px-4 pt-6 pb-10 sm:px-6">
           <div className="mb-6 flex items-center justify-between">
             <Button variant="ghost" size="sm" className="-ml-2 rounded-full" render={<Link to="/market" />}>
-              <ArrowLeft /> All Deeds
+              <ArrowLeft /> All Holdfasts
             </Button>
             <Button variant="ghost" size="sm" className="rounded-full" onClick={() => reload()} disabled={loading}>
               <RefreshCw className={cn(loading && "animate-spin")} /> Refresh
@@ -306,7 +306,7 @@ function ActionCard({ deed, onBuy, onDone }: { deed: LiveDeed; onBuy: () => void
             </Button>
           ) : (
             <Button className="mt-4 h-11 w-full rounded-xl text-sm" onClick={onBuy}>
-              <ShoppingBag /> Buy this Deed
+              <ShoppingBag /> Buy this Holdfast
             </Button>
           )}
           <p className="mt-2 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">
@@ -329,7 +329,7 @@ function ActionCard({ deed, onBuy, onDone }: { deed: LiveDeed; onBuy: () => void
           )}
           {account === deed.owner && (
             <Button variant="outline" className="mt-3 w-full rounded-xl" render={<Link to="/console" />}>
-              Manage in My Deeds
+              Manage in My Holdfasts
             </Button>
           )}
         </div>
@@ -347,7 +347,7 @@ function ChainFacts({ deed }: { deed: LiveDeed }) {
     ["Service activation", deed.activation ? `v${deed.activation.version} by ${deed.activation.owner}` : "none"],
     ["Name rented until", deed.leaseUntil ? dateOnly(deed.leaseUntil) : "unknown"],
     ["Registry", <span className="font-mono">{CONFIG.registry}</span>],
-    ["Deed contract", <span className="font-mono">{CONFIG.deed}</span>],
+    ["Holdfast contract", <span className="font-mono">{CONFIG.deed}</span>],
   ]
   return (
     <div className="grid gap-4 md:grid-cols-2">
@@ -409,7 +409,7 @@ function JobsTab({ name }: { name: string }) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        Every paid job this Deed's runtime received: who paid, under which owner it was accepted, the answer, and the enclave
+        Every paid job this Holdfast's runtime received: who paid, under which owner it was accepted, the answer, and the enclave
         signature checks. Refunds link to their transaction.
         {snapshotAt && (
           <span className="mt-1 block text-xs">

@@ -5,7 +5,7 @@ import { loadDeed, loadDeedIds, type LiveDeed } from "./live"
 export const DATA_SOURCE = "testnet" as const
 
 // Results are cached briefly and in-flight requests are shared, so several components asking for
-// the same Deed at once cause one set of network calls (the public APIs are rate-limited).
+// the same Holdfast at once cause one set of network calls (the public APIs are rate-limited).
 const cache = new Map<string, { at: number; deed: Promise<LiveDeed | null> }>()
 let idsCache: { at: number; ids: Promise<string[]> } | null = null
 const FRESH_MS = 20_000

@@ -1,4 +1,4 @@
-// Builds every Deed shown in the app from NEAR testnet: contract state via RPC views and
+// Builds every Holdfast shown in the app from NEAR testnet: contract state via RPC views and
 // history from every transaction that touched the name (FastNEAR tx API). No server, no sample data.
 import { CONFIG, isDemoAccount } from "./config"
 import { accountTxHashes, toNear, transactions, view, viewAccount, type TxSummary } from "./near"
@@ -53,7 +53,7 @@ export interface LiveDeed extends Deed {
 }
 
 const iso = (ns: string | number) => new Date(Number(BigInt(ns) / 1_000_000n)).toISOString()
-const short = (a: string) => (a === CONFIG.deed ? "the Deed escrow" : a)
+const short = (a: string) => (a === CONFIG.deed ? "the Holdfast escrow" : a)
 const hueOf = (s: string) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7)
 
 function historyFrom(tokenId: string, txs: TxSummary[]): HistoryEvent[] {

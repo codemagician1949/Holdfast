@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Recompute a Deed title page's headline numbers from chain data, independently of the web app.
+"""Recompute a Holdfast title page's headline numbers from chain data, independently of the web app.
 
     python3 verify/recompute-title.py [token_id] [--compare]
 
-Sources: the account history of the name and of the Deed contract (FastNEAR's public transaction index,
-the only per-account history NEAR offers), and the Deed contract's own state read over RPC (every job and
+Sources: the account history of the name and of the Holdfast contract (FastNEAR's public transaction index,
+the only per-account history NEAR offers), and the Holdfast contract's own state read over RPC (every job and
 sale record). Every number below is re-derived by this file's own code, from the same definitions the page
 states, and the job and sale numbers are cross-checked against contract state. With --compare it also runs
 the page's own loader (web/src/lib/live.ts, needs bun) and checks that both give the same numbers.
@@ -12,7 +12,7 @@ the page's own loader (web/src/lib/live.ts, needs bun) and checks that both give
 Definitions (as on the page):
   Paid into the name   successful plain NEAR transfers to the name + jobs the contract settled into it
   Payments             the number of those
-  Misuse attempts      failed transactions that tried to act as the name, call the Deed contract about it,
+  Misuse attempts      failed transactions that tried to act as the name, call the Holdfast contract about it,
                        or move it in the registry
   Owners so far        holding periods: listing into the escrow and cancelling don't count as a new owner
 """

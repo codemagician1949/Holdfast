@@ -11,10 +11,10 @@ import { ConnectDialog } from "./connect-dialog"
 const NAV = [
   { to: "/market", label: "Browse" },
   { to: "/try", label: "Try Preflight" },
-  { to: "/new", label: "Start a Deed" },
+  { to: "/new", label: "Start a Holdfast" },
   { to: "/how", label: "How it works" },
   { to: "/proof", label: "Safety proof" },
-  { to: "/console", label: "My Deeds" },
+  { to: "/console", label: "My Holdfasts" },
 ]
 
 export function useTheme() {
@@ -68,7 +68,7 @@ export function SiteHeader() {
         >
           <Link to="/" className="flex items-center gap-2.5">
             <SealLogo />
-            <span className="font-heading text-2xl tracking-tight">Deed</span>
+            <span className="font-heading text-2xl tracking-tight">Holdfast</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">

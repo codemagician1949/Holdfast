@@ -1,4 +1,4 @@
-# Deed: evidence
+# Holdfast: evidence
 
 The detailed evidence behind the [README](../README.md). Every guarantee, whose code enforces it and where it's proven: [INVARIANTS.md](INVARIANTS.md). Threat model: [../THREAT_MODEL.md](../THREAT_MODEL.md). Free re-check of everything on this page against the chain: `python3 verify/check-testnet.py`.
 
@@ -19,7 +19,7 @@ This is one scripted, team-run scenario: a bounded test, not proof that every tr
 | setup | The seller grants their agent a capped spend (0.1 NEAR, to the seller only) | transaction | ok | PASS | [`H27Suuz8…`](https://testnet.nearblocks.io/txns/H27Suuz8B4tc65BVR8qJzT4ernZBaMM4F8yKV6ifCX1X) |
 | earn | A customer pays 0.1 NEAR into the name | transaction | ok | PASS | [`6puWm2PJ…`](https://testnet.nearblocks.io/txns/6puWm2PJRHusiuZHkQ8h8pRejSLV9aPiyA9tFu6Sonkw) |
 | pre | The seller's agent spends within its grant | transaction | ok | PASS | [`2ECxpS9x…`](https://testnet.nearblocks.io/txns/2ECxpS9xh44E3GmfavLz5a1wHxJuxy31WXrWMrE23LkS) |
-| job | A customer pays for a job: the Deed contract holds the payment | transaction | ok | PASS | [`9Vbh5pWg…`](https://testnet.nearblocks.io/txns/9Vbh5pWgfgUgeaxNmBtUvxNNR8LQ1ppho6NBMb9CuBqD) |
+| job | A customer pays for a job: the Holdfast contract holds the payment | transaction | ok | PASS | [`9Vbh5pWg…`](https://testnet.nearblocks.io/txns/9Vbh5pWgfgUgeaxNmBtUvxNNR8LQ1ppho6NBMb9CuBqD) |
 | J1 | The runtime delivers and settles the job | transaction | ok | PASS | [`9xWvDeh4…`](https://testnet.nearblocks.io/txns/9xWvDeh4ACoY18nMEknnESJNWirdnamUiQPzjkWTSpNw) |
 | J1 | The job's payment landed in the name's own wallet (+0.05 NEAR) | state read | ok | PASS | — |
 | job | A customer pays for a second job (it will still be pending at the sale) | transaction | ok | PASS | [`5Jj2frVj…`](https://testnet.nearblocks.io/txns/5Jj2frVjnmvJHauCaLqMFaTB1QGLi2DNK5nujFZmx9SX) |
@@ -30,7 +30,7 @@ This is one scripted, team-run scenario: a bounded test, not proof that every tr
 | B1 | The seller's earnings swept to the seller at listing (+0.1359 NEAR net of fees) | state read | ok | PASS | — |
 | earn | A customer pays 0.1 NEAR into the name while it is listed | transaction | ok | PASS | [`8C72BPGU…`](https://testnet.nearblocks.io/txns/8C72BPGUBdcT3H3fUiqC9jBEjy9afbZ1T5LAPPJTNyxg) |
 | job | While listed, a customer pays for a job (the seller's activation is still current) | transaction | ok | PASS | [`3GUtwRBo…`](https://testnet.nearblocks.io/txns/3GUtwRBoTvHdYosJFxDghprVkjG6SfYXje3VgjvVP2Qg) |
-| J3 | The runtime settles it while the Deed is listed | transaction | ok | PASS | [`Cx8XDr85…`](https://testnet.nearblocks.io/txns/Cx8XDr85oMujEzyXKpPveiSCzwHyVAi5ixGTNo6WTKaT) |
+| J3 | The runtime settles it while the Holdfast is listed | transaction | ok | PASS | [`Cx8XDr85…`](https://testnet.nearblocks.io/txns/Cx8XDr85oMujEzyXKpPveiSCzwHyVAi5ixGTNo6WTKaT) |
 | J3 | A job paid while listed is paid into the name (it reaches the seller at the sale, B3) | state read | ok | PASS | — |
 | buy | The buyer pays exactly the price; the escrow hands them the name | transaction | ok | PASS | [`AJmMehAC…`](https://testnet.nearblocks.io/txns/AJmMehACkQWuk9jR3bbmyaqfEQSh9H2gUabH4MsN8LiJ) |
 | G5 | Registry says the buyer (maya.deedhq.testnet) owns the name | state read | ok | PASS | — |
@@ -54,9 +54,9 @@ This is one scripted, team-run scenario: a bounded test, not proof that every tr
 
 ### Live Preflight jobs (NEAR testnet)
 
-**Since contract v3** a job is paid into the Deed contract's escrow (`pay_job`) and settled or refunded by the contract. First v3 job: [`Hppo221e…`](https://testnet.nearblocks.io/txns/Hppo221erbcxT7UfP8ebP5AF3qis7bsWfQCRugAp2Mji) (`pay_job`, job 1) → answered with all three enclave checks → settled into the name's wallet by the runtime's limited key in [`HbG8dD5t…`](https://testnet.nearblocks.io/txns/HbG8dD5tEoqNEgYJKCpyaDTmXHGEjExSWFHa4nLFuQf2). The live sale above settles and refunds more jobs on chain.
+**Since contract v3** a job is paid into the Holdfast contract's escrow (`pay_job`) and settled or refunded by the contract. First v3 job: [`Hppo221e…`](https://testnet.nearblocks.io/txns/Hppo221erbcxT7UfP8ebP5AF3qis7bsWfQCRugAp2Mji) (`pay_job`, job 1) → answered with all three enclave checks → settled into the name's wallet by the runtime's limited key in [`HbG8dD5t…`](https://testnet.nearblocks.io/txns/HbG8dD5tEoqNEgYJKCpyaDTmXHGEjExSWFHa4nLFuQf2). The live sale above settles and refunds more jobs on chain.
 
-**Before v3** (the table below), customers paid the name directly and refunds were transfers from the operator, each recorded with its tx. Real payments of 0.05 NEAR from `maya.deedhq.testnet` to the Deed, answered by the runtime ([ledger snapshot](../verify/preflight-jobs-testnet.json); also on the Deed page's **Jobs answered** tab). "attested" = the recovered signer is listed in NEAR AI's attestation report for `z-ai/glm-5.3-flash` (Intel TDX quote + NVIDIA evidence).
+**Before v3** (the table below), customers paid the name directly and refunds were transfers from the operator, each recorded with its tx. Real payments of 0.05 NEAR from `maya.deedhq.testnet` to the Holdfast, answered by the runtime ([ledger snapshot](../verify/preflight-jobs-testnet.json); also on the Holdfast page's **Jobs answered** tab). "attested" = the recovered signer is listed in NEAR AI's attestation report for `z-ai/glm-5.3-flash` (Intel TDX quote + NVIDIA evidence).
 
 | Payment | Transaction asked about (high-risk flags) | Accepted under | Result | Enclave signature |
 |---|---|---|---|---|
@@ -69,9 +69,9 @@ This is one scripted, team-run scenario: a bounded test, not proof that every tr
 | [`A4CPng3S…`](https://testnet.nearblocks.io/txns/A4CPng3SwYX9cipCtFHKnYskDMh6cm2mtaGHc24goygU) | unlimited_approval | v4 under `kofi.deedhq.testnet` | answered: **DO NOT SIGN** | hashes ✓ · signer ✓ · attested ✓ |
 | [`EyjvceKV…`](https://testnet.nearblocks.io/txns/EyjvceKVkmDfLLqhAgYmeoZCix1NfhaYrAFWgPdWQ83C) | — (plain 5 NEAR transfer) | v4 under `kofi.deedhq.testnet` | answered: **SAFE TO SIGN** | hashes ✓ · signer ✓ · attested ✓ |
 
-**Verdict floor (2026-11-04):** job `CNffZWAF…` asked about adding a full-access key (flagged high) and the model answered **CHECK FIRST**; a held-out dry run reproduced it. The runtime and the Deed page now show the stricter of the model's verdict and the flags' rating (here DO NOT SIGN), marked as raised, without altering the signed text.
+**Verdict floor (2026-11-04):** job `CNffZWAF…` asked about adding a full-access key (flagged high) and the model answered **CHECK FIRST**; a held-out dry run reproduced it. The runtime and the Holdfast page now show the stricter of the model's verdict and the flags' rating (here DO NOT SIGN), marked as raised, without altering the signed text.
 
-**Config v2 / activation v4** ([activation tx [`FSt8KMdb…`](https://testnet.nearblocks.io/txns/FSt8KMdbwassMUz8NSAfZzpykBpQSZ7txRpJAgEK4T1Y)]): `z-ai/glm-5.3-flash` is a reasoning model and sometimes spent all 700 tokens thinking, returning no answer (job `DzFD3uud…`, refunded). The fix, `"reasoning_effort": "low"`, went into [runtime/preflight.config.json](../runtime/preflight.config.json), so the config fingerprint changed (`8c5e8df1…` → `678ff1f4…`) and the owner re-activated the Deed as v4 naming the new fingerprint. The runtime then refused v3 and served only v4: a change to how the service answers is visible on chain, not a silent server edit.
+**Config v2 / activation v4** ([activation tx [`FSt8KMdb…`](https://testnet.nearblocks.io/txns/FSt8KMdbwassMUz8NSAfZzpykBpQSZ7txRpJAgEK4T1Y)]): `z-ai/glm-5.3-flash` is a reasoning model and sometimes spent all 700 tokens thinking, returning no answer (job `DzFD3uud…`, refunded). The fix, `"reasoning_effort": "low"`, went into [runtime/preflight.config.json](../runtime/preflight.config.json), so the config fingerprint changed (`8c5e8df1…` → `678ff1f4…`) and the owner re-activated the Holdfast as v4 naming the new fingerprint. The runtime then refused v3 and served only v4: a change to how the service answers is visible on chain, not a silent server edit.
 
 ---
 
@@ -81,7 +81,7 @@ The same flow done by hand in Chrome with [Meteor Wallet](https://wallet.meteorw
 
 - The customer paid a job into the escrow from the Try page; it was answered with all three enclave checks and paid into the name (job 7, under Maya, activation v7).
 - Maya signed a holder sign-in (NEP-413) and saw her customers' questions; then listed for 1 NEAR from the console.
-- Kofi bought from the Deed page and switched the service on from his console (activation v8). The first attempt failed: the app guessed the next version from event history and missed the high-water mark of 7. Fixed by adding the `get_version_floor` view (contract v3.1) and reading it in the app.
+- Kofi bought from the Holdfast page and switched the service on from his console (activation v8). The first attempt failed: the app guessed the next version from event history and missed the high-water mark of 7. Fixed by adding the `get_version_floor` view (contract v3.1) and reading it in the app.
 - The customer's next job was accepted under Kofi (activation v8) and paid into the same name (job 8).
 - Maya, with her own full-access key, then tried to take money from the name's wallet ([`C8kedLuR…`](https://testnet.nearblocks.io/txns/C8kedLuRjPq8LNMJcQiom8HHnbNW3qsvcq4FR7tF2pVP): "extension 'maya.deedhq.testnet' is not enabled"), sell it again ([`DVG5sZH8…`](https://testnet.nearblocks.io/txns/DVG5sZH8k4X49JSn7sjmwY4CeW7EhfQzi3TpNw6R5teu): registry `only_owner`), switch it back on ([`2wDFYRx3…`](https://testnet.nearblocks.io/txns/2wDFYRx3VuyGjaiiwkoM7aXt5QjHr12eigXGTd94sckW): "only the current owner of the name can activate it") and sign in as the name (`w_resolve_auth`: "named account is not an owner of this account"). All refused.
 - Also found: Meteor Web's NEAR Connect sign-in sometimes doesn't report back, and signing then returns nothing. The app now says so ("Your wallet returned without signing…") instead of showing an empty transaction.
@@ -93,18 +93,18 @@ The same flow done by hand in Chrome with [Meteor Wallet](https://wallet.meteorw
 - **Lease (C9):** `buy` refuses and refunds a purchase with under 30 days of lease left (contract v3.2, test `buyer_refunded_when_the_lease_is_about_to_end`).
 - **Monitoring:** the daily CI check now fails if the runtime can't answer or settle, if NEAR AI refused its last call for credit or auth, or if the settle key's gas allowance runs low.
 
-### A second Deed on a second runtime (2026-11-06)
+### A second Holdfast on a second runtime (2026-11-06)
 
-A second Deed with its own runtime, key and ledger, to show the service is bound to the name, not to one server. **Both runtimes are run by the team**; this is not an outside operator.
+A second Holdfast with its own runtime, key and ledger, to show the service is bound to the name, not to one server. **Both runtimes are run by the team**; this is not an outside operator.
 
 - Maya rented `sentinel.deedbot.deedhq.testnet` ([`3n6NgRhi…`](https://testnet.nearblocks.io/txns/3n6NgRhi572mST7hKyW8TMxngjqbuWfmtTQyBGckAV43)) and switched it on ([`8SKZRM7x…`](https://testnet.nearblocks.io/txns/8SKZRM7xEGiVPe7WgRazUBAax6MZkNGNHBGNu2P6Nif7), activation v1) naming runtime `deed-ops2.testnet` at `https://preflight-2-production.up.railway.app`, with the same public config fingerprint `678ff1f4…`.
-- `deed-ops2.testnet` is a separate account whose only key on the runtime is a function-call key (`ed25519:3sdShHVn…`) limited to `settle_job`/`refund_job` on the Deed contract. It is a separate Railway service with its own volume, so its job ledger starts empty and shares nothing with the first runtime's.
+- `deed-ops2.testnet` is a separate account whose only key on the runtime is a function-call key (`ed25519:3sdShHVn…`) limited to `settle_job`/`refund_job` on the Holdfast contract. It is a separate Railway service with its own volume, so its job ledger starts empty and shares nothing with the first runtime's.
 - A customer (`amara-deed.testnet`) paid 0.05 NEAR into the escrow ([`A2VJgfrB…`](https://testnet.nearblocks.io/txns/A2VJgfrBSbUR8bHPMoMyXadxzVTEfrL82KzAxanA6eHR), job 9); runtime 2 answered it (full-access key → **DO NOT SIGN**, all three enclave checks) and settled it into the sentinel name with its own key ([`7WSNdKYY…`](https://testnet.nearblocks.io/txns/7WSNdKYYSmDpweyT3gDUiLtxCAZs6aUFhh2NnxUMV1u), signer `deed-ops2.testnet`).
-- Each runtime refuses jobs paid to the other (`jobs.ts`: "Job … was paid to runtime …, not this one"). `verify/check-testnet.py` now checks every runtime that an activated Deed names (§4b), and `verify/recompute-title.py sentinel.deedbot.deedhq.testnet --compare` matches the page (0.05 NEAR, 1 payment, 0 misuse attempts, 1 owner).
+- Each runtime refuses jobs paid to the other (`jobs.ts`: "Job … was paid to runtime …, not this one"). `verify/check-testnet.py` now checks every runtime that an activated Holdfast names (§4b), and `verify/recompute-title.py sentinel.deedbot.deedhq.testnet --compare` matches the page (0.05 NEAR, 1 payment, 0 misuse attempts, 1 owner).
 
 ### Counterparty check for agents that pay (2026-11-06)
 
-Contracts deployed from commit `ed33da1`, built with `cargo near build reproducible-wasm` in the same pinned image as the Deed contract: `reports.deedhq.testnet` (shared blocklist) and `agent-vault.deedhq.testnet` (redeployed from `6a2b2e6` after the fix below). Code hashes: [deploy/testnet.json](../deploy/testnet.json). The vault's owner is `amara-deed.testnet`. The agent's only key, `ed25519:6D7J7a3e…`, is a function-call key on the vault for `pay`, with a 0.25 NEAR gas allowance.
+Contracts deployed from commit `ed33da1`, built with `cargo near build reproducible-wasm` in the same pinned image as the Holdfast contract: `reports.deedhq.testnet` (shared blocklist) and `agent-vault.deedhq.testnet` (redeployed from `6a2b2e6` after the fix below). Code hashes: [deploy/testnet.json](../deploy/testnet.json). The vault's owner is `amara-deed.testnet`. The agent's only key, `ed25519:6D7J7a3e…`, is a function-call key on the vault for `pay`, with a 0.25 NEAR gas allowance.
 
 **Staged by the team** (so the check has something real to find): `victim-demo.deedhq.testnet` sent 0.25 NEAR to the look-alike `mayastudio-billing.deedhq.testnet` with a fake "updated payout account" invoice ([`BGhhCgSN…`](https://testnet.nearblocks.io/txns/BGhhCgSNjscgWnrzmCVD4jDnuj5jo7jYDfhPV1dJbbVe)). The team's `watchdog.deedhq.testnet` reported the look-alike with that transaction as evidence and a 0.1 NEAR bond. An earlier staged account, `drainer-demo.deedhq.testnet`, is reported the same way ([`6hXp6uHE…`](https://testnet.nearblocks.io/txns/6hXp6uHEJYYyrT7QxbQcdjY1XQ29sLoz2Jx5rBBnFoBq)).
 
@@ -131,7 +131,7 @@ What earlier runs found:
 
 ### Clean-clone runs (2026-11-06)
 
-- `contract/test.sh` from a fresh clone: **24 tests pass in 1 min 51 s** (the Deed crate on 2026-11-06; since the blocklist and agent-vault contracts were added the same command runs 36, all passing on 2026-11-07) ([log](../verify/runs/2026-11-06-clean-clone-contract-tests.log)). The first attempt failed the way reviewers saw: near-workspaces could not download and unpack the NEAR sandbox. `test.sh` now fetches the same pinned sandbox binary itself (with retries) and points `NEAR_SANDBOX_BIN_PATH` at it.
+- `contract/test.sh` from a fresh clone: **24 tests pass in 1 min 51 s** (the Holdfast crate on 2026-11-06; since the blocklist and agent-vault contracts were added the same command runs 36, all passing on 2026-11-07) ([log](../verify/runs/2026-11-06-clean-clone-contract-tests.log)). The first attempt failed the way reviewers saw: near-workspaces could not download and unpack the NEAR sandbox. `test.sh` now fetches the same pinned sandbox binary itself (with retries) and points `NEAR_SANDBOX_BIN_PATH` at it.
 - `verify/rebuild-deed.sh` in GitHub Actions from a fresh checkout: rebuilt hash `4TM4z2E1…` = the code on chain ([log](../verify/runs/2026-11-06-ci-rebuild-deed.log), [run](https://github.com/codemagician1949/Deed/actions/runs/42206333663)). On macOS a fresh-clone rebuild first failed with "Cargo.toml does not exist" (also reported by an outside AI review): cargo-near copies the repo into `$TMPDIR`, which on macOS is `/var/folders/…` and invisible to Docker. `rebuild-deed.sh` now uses a Docker-shared folder for its clone and for cargo-near's copy, and checks Docker can see it before building. Re-run from a fresh clone on macOS (2026-11-07): `PASS`, rebuilt hash `5L5QNCox…` = the code on chain ([log](../verify/runs/2026-11-07-clean-clone-macos-rebuild-deed.log)).
 - `verify/recompute-title.py --compare`: the title page's four headline numbers recomputed from chain data by independent code match the page's own loader; settled jobs and sales match contract state.
 

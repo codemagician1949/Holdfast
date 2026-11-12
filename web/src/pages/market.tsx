@@ -37,11 +37,11 @@ export function MarketPage() {
         <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-8 sm:px-6">
           <Reveal>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="font-heading text-5xl tracking-tight sm:text-6xl">Browse Deeds</h1>
+              <h1 className="font-heading text-5xl tracking-tight sm:text-6xl">Browse Holdfasts</h1>
               <SampleBadge />
             </div>
             <p className="mt-3 max-w-xl text-muted-foreground">
-              Every card is a real Deed on NEAR testnet: a name with its own wallet and history. Open one to see exactly what
+              Every card is a real Holdfast on NEAR testnet: a name with its own wallet and history. Open one to see exactly what
               it has earned, who has owned it and every attempt to misuse it.
             </p>
           </Reveal>
@@ -96,7 +96,7 @@ export function MarketPage() {
             ))}
           </AnimatePresence>
         </motion.div>
-        {loading && deeds.length === 0 && <p className="py-20 text-center text-muted-foreground">Reading Deeds from NEAR testnet…</p>}
+        {loading && deeds.length === 0 && <p className="py-20 text-center text-muted-foreground">Reading Holdfasts from NEAR testnet…</p>}
         {error && deeds.length === 0 && (
           <p className="py-20 text-center text-destructive">Couldn't reach NEAR testnet: {error}. Refresh to try again.</p>
         )}

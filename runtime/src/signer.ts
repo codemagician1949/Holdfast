@@ -1,5 +1,5 @@
 // Minimal NEAR transaction signer for the runtime's two on-chain duties: `settle_job` and `refund_job`
-// on the Deed contract. The key it uses should be a FUNCTION-CALL access key limited to exactly those
+// on the Holdfast contract. The key it uses should be a FUNCTION-CALL access key limited to exactly those
 // two methods on that contract (deploy/runtime-key.sh), so a leaked runtime key can't move funds.
 //
 // Borsh layout (nearcore `Transaction` v0 and `SignedTransaction`):

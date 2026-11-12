@@ -85,7 +85,7 @@ export function JobCard({ job }: { job: Job }) {
       )}
       {job.redacted && job.answer && (
         <p className="text-xs text-muted-foreground">
-          The question and the explanation are private to the customer and the Deed's holder. Their sha256 hashes (signed by the enclave) are below.
+          The question and the explanation are private to the customer and the Holdfast's holder. Their sha256 hashes (signed by the enclave) are below.
         </p>
       )}
       {verdict && (

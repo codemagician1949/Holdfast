@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-"""Read-only check of the live Deed deployment on NEAR testnet. No wallet, no NEAR, no keys.
+"""Read-only check of the live Holdfast deployment on NEAR testnet. No wallet, no NEAR, no keys.
 
   python3 verify/check-testnet.py [--runtime https://preflight-production-8802.up.railway.app]
 
 Checks:
   1. Each House of Stake replica contract on testnet has the same code hash as the live mainnet contract
      (both read now, not from our files), and as the vendored deploy/mainnet-wasm/*.wasm.
-  2. The deed contract is deployed and answers views; the demo Deed's owner and activation are readable.
+  2. The deed contract is deployed and answers views; the demo Holdfast's owner and activation are readable.
   3. Every transaction in verify/report-testnet.json exists on chain, its outcome (accepted or rejected)
      matches the report, and every rejected one failed with the exact error the report expects.
      Then a few facts are re-read live: the old owner still can't sign in as the name (NEP-641), the old
      agent is still disabled, and the listing's sweep event paid the seller (G3).
-  4. Optionally, the hosted Preflight runtime is up (and every other runtime an activated Deed names); the sha256 of the raw config bytes it serves equals
-     the fingerprint it reports, the Deed's on-chain activation, and runtime/preflight.config.json here.
-     The deployed Deed contract's code hash equals the one recorded at deploy (deploy/testnet.json).
+  4. Optionally, the hosted Preflight runtime is up (and every other runtime an activated Holdfast names); the sha256 of the raw config bytes it serves equals
+     the fingerprint it reports, the Holdfast's on-chain activation, and runtime/preflight.config.json here.
+     The deployed Holdfast contract's code hash equals the one recorded at deploy (deploy/testnet.json).
   6. NEAR AI's enclave attestation, verified independently with a fresh nonce.
   7. The blocklist and agent-vault contracts are the recorded code, the agent's key can only call pay,
      and /v1/check blocks the staged look-alike but not the honest vendor.
@@ -101,7 +101,7 @@ for wasm, testnet_acct, mainnet_acct, is_global in pairs:
     except Exception as e:
         check(False, f"{testnet_acct}: {e}")
 
-print("\n== 2. Deed contract and the demo Deed")
+print("\n== 2. Holdfast contract and the demo Holdfast")
 try:
     name = "preflight." + DEP["tla"]
     token = view(TESTNET, DEP["registry"], "nft_token", {"token_id": name})
@@ -166,7 +166,7 @@ if seller and agent:
         check(seller in to, f"G3    the listing's sweep event paid the seller ({', '.join(str(x) for x in to) or 'no sweep event'})")
 
 def check_runtime(runtime, act, name):
-    """Health, monitoring and config checks for one hosted runtime, against the activation of the Deed it serves."""
+    """Health, monitoring and config checks for one hosted runtime, against the activation of the Holdfast it serves."""
     try:
         base = runtime.rstrip("/")
         h = json.load(urllib.request.urlopen(base + "/v1/health", timeout=30))
@@ -198,7 +198,7 @@ def check_runtime(runtime, act, name):
 if runtime:
     print("\n== 4. Hosted Preflight runtime")
     check_runtime(runtime, act, "preflight." + DEP["tla"])
-    # Every other activated Deed that names a different hosted runtime (e.g. the second Deed on its own runtime).
+    # Every other activated Holdfast that names a different hosted runtime (e.g. the second Holdfast on its own runtime).
     try:
         others = {}
         for t in view(TESTNET, DEP["registry"], "nft_tokens", {"from_index": "0", "limit": 50}) or []:
@@ -213,7 +213,7 @@ if runtime:
         check(False, f"other runtimes: {e}")
 
 if DEP.get("deedCodeHash"):
-    print("\n== 5. Deployed Deed contract")
+    print("\n== 5. Deployed Holdfast contract")
     try:
         h = code_hash(TESTNET, DEP["deed"])
         check(h == DEP["deedCodeHash"], f"{DEP['deed']} code hash {h[:12]}… = recorded at deploy (deploy/testnet.json)")

@@ -32,7 +32,7 @@ export function ConnectDialog({ open, onOpenChange }: { open: boolean; onOpenCha
         <DialogHeader>
           <DialogTitle className="font-heading text-3xl font-normal">Connect a wallet</DialogTitle>
           <DialogDescription>
-            Your wallet is how Deed knows which names you own. Nothing moves unless you approve it in your wallet. Deed runs on
+            Your wallet is how Holdfast knows which names you own. Nothing moves unless you approve it in your wallet. Holdfast runs on
             NEAR <b>testnet</b>; testnet coins have no cash value.
           </DialogDescription>
         </DialogHeader>

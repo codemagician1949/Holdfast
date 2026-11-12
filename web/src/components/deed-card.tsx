@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { Sparkline, StatusPill } from "./bits"
 import { Tilt } from "./motion"
 
-/** The Deed itself: a name that is also a wallet, a business and a token. */
+/** The Holdfast itself: a name that is also a wallet, a business and a token. */
 export function DeedCard({ deed, className, compact = false }: { deed: Deed; className?: string; compact?: boolean }) {
   const dot = deed.id.indexOf(".")
   const label = deed.id.slice(0, dot)

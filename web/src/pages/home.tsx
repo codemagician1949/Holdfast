@@ -71,7 +71,7 @@ export function HomePage() {
               transition={{ duration: 0.7, delay: 0.9, ease }}
               className="mt-6 max-w-xl text-lg text-muted-foreground"
             >
-              A Deed is a name like <span className="font-medium text-foreground">preflight.bot</span> that is also a
+              A Holdfast is a name like <span className="font-medium text-foreground">preflight.bot</span> that is also a
               wallet and a working AI service. It earns money while you hold it. When you sell it, the earnings, the
               keys and the track record move to the buyer in one step, and you can't keep a back door.
             </motion.p>
@@ -83,7 +83,7 @@ export function HomePage() {
               className="mt-8 flex flex-wrap items-center gap-3"
             >
               <Button size="lg" className="h-11 rounded-full px-5 text-sm" render={<Link to="/market" />}>
-                <Store /> Browse Deeds
+                <Store /> Browse Holdfasts
               </Button>
               <Button size="lg" variant="outline" className="h-11 rounded-full px-5 text-sm" render={<a href="#sale" />}>
                 Watch a sale <ArrowRight />
@@ -97,7 +97,7 @@ export function HomePage() {
               className="mt-10 flex flex-wrap gap-x-10 gap-y-4"
             >
               <div>
-                <dt className="text-xs text-muted-foreground">Paid into Deeds</dt>
+                <dt className="text-xs text-muted-foreground">Paid into Holdfasts</dt>
                 <dd className="font-heading text-3xl">
                   <AnimatedNumber value={totals.earned} decimals={1} suffix=" NEAR" />
                 </dd>
@@ -135,7 +135,7 @@ export function HomePage() {
           <h2 className="font-heading text-4xl tracking-tight sm:text-5xl">One thing, three jobs</h2>
           <p className="mt-4 text-muted-foreground">
             On most blockchains an NFT is a picture that points at a wallet somewhere else. On NEAR, the NFT{" "}
-            <em>is</em> the account. Deed puts a business inside it.
+            <em>is</em> the account. Holdfast puts a business inside it.
           </p>
         </Reveal>
         <Stagger className="mt-12 grid gap-4 md:grid-cols-3">
@@ -215,7 +215,7 @@ export function HomePage() {
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-heading text-4xl tracking-tight sm:text-5xl">Deeds right now</h2>
+            <h2 className="font-heading text-4xl tracking-tight sm:text-5xl">Holdfasts right now</h2>
             <p className="mt-2 text-muted-foreground">Read live from NEAR testnet. Each one has its own wallet, earnings and history.</p>
           </div>
           <Button variant="outline" className="rounded-full" render={<Link to="/market" />}>

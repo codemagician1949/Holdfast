@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Rebuild the deployed Deed contract from source and compare it with the code on chain.
+# Rebuild the deployed Holdfast contract from source and compare it with the code on chain.
 #
 # The contract's NEP-330 metadata (`contract_source_metadata`) names the exact git commit, the build
 # image (pinned by digest) and the build command. This script reads them from the live contract,
@@ -52,4 +52,4 @@ BUILT=$(python3 -c "import hashlib,sys;d=hashlib.sha256(open(sys.argv[1],'rb').r
 while n: n,r=divmod(n,58); s=A[r]+s
 print(s)" "$WORK/src/contract/target/near/deed/deed.wasm")
 echo "rebuilt from source: $BUILT"
-if [ "$BUILT" = "$ONCHAIN" ]; then echo "PASS the deployed Deed contract is exactly commit $REV"; else echo "FAIL rebuilt hash differs from the code on chain"; exit 1; fi
+if [ "$BUILT" = "$ONCHAIN" ]; then echo "PASS the deployed Holdfast contract is exactly commit $REV"; else echo "FAIL rebuilt hash differs from the code on chain"; exit 1; fi

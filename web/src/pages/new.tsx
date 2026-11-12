@@ -109,8 +109,8 @@ export function NewDeedPage() {
         <Aurora hue={120} />
         <div className="relative mx-auto max-w-3xl px-4 pt-10 pb-8 sm:px-6">
           <Reveal>
-            <div className="mb-3 text-xs font-medium tracking-[0.2em] text-primary uppercase">Your own Deed, in two signatures</div>
-            <h1 className="font-heading text-5xl leading-none tracking-tight sm:text-7xl">Start a Deed</h1>
+            <div className="mb-3 text-xs font-medium tracking-[0.2em] text-primary uppercase">Your own Holdfast, in two signatures</div>
+            <h1 className="font-heading text-5xl leading-none tracking-tight sm:text-7xl">Start a Holdfast</h1>
             <p className="mt-4 text-lg text-muted-foreground">
               Claim a name, then switch Preflight on under it. The name is yours: its own wallet, its earnings, and the right to sell it. You need a NEAR testnet
               wallet with about 0.5 test NEAR (free from the testnet faucet).
@@ -178,7 +178,7 @@ export function NewDeedPage() {
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ease }} className="rounded-3xl border border-primary/40 bg-primary/5 p-5">
               <div className="font-heading text-3xl">{tokenId} is live</div>
               <p className="mt-2 text-sm text-muted-foreground">
-                It's your Deed now: its page shows its history from the chain, and you can sell it from <Link to="/console" className="underline">My Deeds</Link>.
+                It's your Holdfast now: its page shows its history from the chain, and you can sell it from <Link to="/console" className="underline">My Holdfasts</Link>.
                 {txs.activate && (
                   <>
                     {" "}

@@ -1,4 +1,4 @@
-// NEP-413 signed messages: how a Deed's holder proves, to this server, that they control the account
+// NEP-413 signed messages: how a Holdfast's holder proves, to this server, that they control the account
 // the registry lists as owner (the holder-only console, owner.ts). Since v3 a customer needs no
 // signature: the payer is whoever called pay_job, and the request hash is bound on chain.
 //
