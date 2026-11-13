@@ -18,7 +18,7 @@ flowchart LR
 
 - **Live app:** https://holdfast-near.vercel.app · **Network:** NEAR **testnet** only · **License:** MIT
 - **Video + post on X:** https://x.com/CMagician1604/status/2121253413417615427
-- **Tracks:** NFTs That Do Something (`nfts`, lead) · AI Security & Defense (`security`) · Agent Economy (`agents`) ([how each track's prompt is answered](docs/DETAILS.md#track-fit))
+- **Main track: NFTs That Do Something (`nfts`).** Please judge Holdfast first as an NFT project. Also entered: AI Security & Defense (`security`) and Agent Economy (`agents`) ([how each track's prompt is answered](docs/DETAILS.md#track-fit))
 - **Formerly named Deed**, renamed on 12 Nov 2026 because a different team's project has the same name; the two share no code ([details](#name-and-history)).
 
 ## The problem, in plain words

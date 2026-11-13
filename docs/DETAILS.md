@@ -75,7 +75,7 @@ Staged for the demo, and labelled so on chain: `mayastudio-billing.deedhq.testne
 
 ## Track fit
 
-What each track's own prompt asks for ([nfts](TRACK-nfts.md), [security](https://github.com/nearai/near-hackathon-prompt-examples/blob/main/tracks/06-security.md), [agents](https://github.com/nearai/near-hackathon-prompt-examples/blob/main/tracks/07-agents.md)), and where Holdfast answers it:
+**Main track: NFTs That Do Something (`nfts`).** The other two are secondary. What each track's own prompt asks for ([nfts](TRACK-nfts.md), [security](https://github.com/nearai/near-hackathon-prompt-examples/blob/main/tracks/06-security.md), [agents](https://github.com/nearai/near-hackathon-prompt-examples/blob/main/tracks/07-agents.md)), and where Holdfast answers it:
 
 | Track | The prompt asks for | Where |
 |---|---|---|
