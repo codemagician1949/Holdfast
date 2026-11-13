@@ -2,15 +2,27 @@
 
 [![ci](https://github.com/codemagician1949/Holdfast/actions/workflows/ci.yml/badge.svg)](https://github.com/codemagician1949/Holdfast/actions/workflows/ci.yml)
 
-**Holdfast turns a NEAR name into a small business you can sell.** An AI service lives inside the name and earns from paid jobs. When you sell the name, the buyer gets the business, the money it earns from then on and its public track record, and every key or AI agent the seller left behind stops working. The chain enforces that, not a promise from the seller.
+**Holdfast turns a NEAR name into a small business you can sell.** An AI service lives inside the name and earns from paid jobs. Sell the name, and the buyer gets the business, its future earnings and its public record, while every key and AI agent the seller left behind stops working. The chain enforces that, not a promise from the seller.
+
+**In 30 seconds**
+- **What:** a name on NEAR (like `preflight.bot`) that is at once an NFT you own, a wallet that collects payments, and a paid AI service with a public track record.
+- **For whom:** anyone who builds an AI service or agent and may want to sell it one day, and anyone who wants to buy one without trusting the seller.
+- **Why only on NEAR:** on NEAR the NFT *is* the account, so the account's own code can take the seller's access away at the moment of sale. On other chains an NFT only points at a wallet somewhere else.
+
+```mermaid
+flowchart LR
+  A["1. Build<br/>rent a name,<br/>switch the AI on"] --> B["2. Earn<br/>customers pay the name;<br/>money waits in escrow<br/>until the answer arrives"]
+  B --> C["3. Sell<br/>one transaction: name to buyer,<br/>seller paid, old keys<br/>and AI agents wiped"]
+  C --> D["4. Locked out<br/>the old owner's every<br/>attempt is refused<br/>on chain"]
+```
 
 - **Live app:** https://holdfast-near.vercel.app · **Network:** NEAR **testnet** only · **License:** MIT
 - **Tracks:** `nfts` (lead) · `security` · `agents` ([how each track's prompt is answered](docs/DETAILS.md#track-fit))
-- **Formerly named Deed.** Renamed on 12 Nov 2026 because another NEAR Hackathon project, by a different team, is also called Deed (an NFT-owned keyless account with drain protection); the two were built independently and share no code. On-chain account names still say `deed` (`deed.deedhq.testnet`, `*.deedbot.deedhq.testnet`), because renaming them would mean redeploying and losing the recorded evidence. The repo moved from github.com/codemagician1949/Deed (old links redirect), and deed-near.vercel.app still works.
+- **Formerly named Deed**, renamed on 12 Nov 2026 because a different team's project has the same name; the two share no code ([details](#name-and-history)).
 
 ## The problem, in plain words
 
-Selling an online business or an AI agent today means handing over logins, API keys and wallet access, and trusting the seller not to keep a copy. On NEAR, a name can be an NFT and a full account at the same time, and the account's own code can take the seller's access away when the NFT changes hands. Holdfast puts a working, paid AI service inside such a name, so selling the NFT sells the business.
+Selling an online business or an AI agent today means handing over logins, API keys and wallet access, and trusting the seller not to keep a copy. Holdfast puts the business inside a NEAR name instead, so selling the name sells the business, and nothing the seller kept still works.
 
 The service in the demo is **Preflight**: before you or your AI agent sign a NEAR transaction, it explains it in plain words and flags anything risky. Each answer costs 0.05 test NEAR and is written and signed inside a secure enclave on NEAR AI.
 
@@ -47,13 +59,12 @@ The service in the demo is **Preflight**: before you or your AI agent sign a NEA
 
 ## How it works
 
-1. **Rent.** A name rented from the House of Stake registry becomes a keyless account run by the global `hos-wallet` code; only extensions (owner, lease authority, agents) can act.
-2. **Activate.** The owner calls `deed.activate(name, runtime_id, config_hash, price, version, runtime_url)`; the contract checks the caller against the registry owner in a callback and keeps a per-name version high-water mark, so an old activation can never be replayed. `config_hash` is the sha256 of the public service config.
-3. **Earn.** A customer calls `deed.pay_job(name, request_hash)` with the price: the **contract holds the money**, bound to that exact request and to the runtime the owner activated. The runtime answers, then calls `settle_job`; the contract re-reads the registry owner and pays the name's own wallet only if the job's owner still owns it, otherwise it refunds the customer. The runtime can refund at once, and **anyone** can refund a job left unsettled for 15 minutes, so refunds never depend on the operator. The runtime's only key is a function-call key limited to `settle_job`/`refund_job`.
-4. **List.** `nft_transfer_call` moves the name into the escrow. On that rotation the wallet **clears spend grants, removes every extension and sweeps the NEAR balance to the seller**.
-5. **Buy.** `deed.buy` (exact price) re-points payout to the seller; only if that succeeds does it transfer the name. In the same callback the seller is paid the price minus royalty, or, if the transfer failed, the buyer is refunded in full. No waiting window: House of Stake's code has no way to undo a completed transfer (read from its source), and a name that ends up back in the escrow is returned to the buyer with `recover_name`, never refunded.
-6. **Switch on.** The buyer activates with a higher version; the next paid answer lands in the same name under the new owner.
-
+1. **Rent a name.** The name comes from House of Stake's registry. It is an account no person holds a key to; only its listed permissions can act for it.
+2. **Switch the service on.** The owner records on chain which server answers for the name, its config and its price. Only the current owner can do this, and each new record needs a higher version, so an old one can't be replayed. (`activate`)
+3. **Earn.** A customer pays for one answer. The Holdfast contract holds the money until the server answers, then pays it into the name's own wallet, but only if the same owner still owns the name; otherwise the customer gets it back. If nobody answers within 15 minutes, anyone can trigger the refund. (`pay_job`, `settle_job`, `refund_job`)
+4. **List it for sale.** The name moves into the Holdfast escrow. At that moment the name's wallet wipes every permission the seller and their AI agents had, and pays the seller what the name earned. (`nft_transfer_call`)
+5. **Buy.** The buyer pays the exact price. In one transaction the name moves to the buyer and the seller is paid, minus a 2.5% royalty. If any step fails, the buyer gets the whole price back. (`buy`)
+6. **Switch it back on.** The buyer records their own activation, and the next paid answer lands in the same name, now for them.
 
 Call-by-call sequence, contract API, runtime API and web routes: [docs/REFERENCE.md](docs/REFERENCE.md).
 
@@ -105,6 +116,10 @@ ERC-6551 gives each NFT a separate account whose control follows the token; on N
 - **Third-party code deployed unmodified:** House of Stake [`tla-contracts`](https://github.com/houseofstake/tla-contracts) mainnet bytecode, vendored with its hashes in [deploy/mainnet-wasm](deploy/mainnet-wasm/).
 - **AI-assisted development (Q-005):** the code, tests, scripts and docs were written with an AI coding assistant (Claude Code), directed and reviewed by codemagician. Design critiques we asked AI models for are in [docs/process/](docs/process/): working notes, not external validation.
 - **Baseline (Q-003):** everything here was built during the hackathon, from 2026-11-02. The tag `pre-hackathon` marks the first commit ([9aab65e](https://github.com/codemagician1949/Holdfast/commit/9aab65e)) and `hackathon-submission` the final one: [everything built during the hackathon](https://github.com/codemagician1949/Holdfast/compare/pre-hackathon...hackathon-submission).
+
+## Name and history
+
+Holdfast was called **Deed** until 12 Nov 2026. It was renamed because another NEAR Hackathon project, by a different team, is also called Deed (an NFT-owned keyless account with drain protection); the two were built independently and share no code. On-chain account names still say `deed` (`deed.deedhq.testnet`, `*.deedbot.deedhq.testnet`), because renaming them would mean redeploying every contract and losing the recorded evidence. The repo moved from github.com/codemagician1949/Deed (old links redirect), and deed-near.vercel.app still works.
 
 ## Team and other submissions
 
